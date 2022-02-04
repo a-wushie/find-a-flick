@@ -1,4 +1,5 @@
 // variables 
+var searchButtonEl = document.getElementsByClassName("btn")
 
 var getMovieInfo = function(movie) {
 
@@ -67,3 +68,14 @@ var displayMovieInfo = function(data) {
     document.body.appendChild(MOVIECONTAINER)
 
 }
+
+$("#btn").click(function(event) {
+    // Prevent page from reloading
+    event.preventDefault();
+
+    // Set sibling form text value to variable
+    var movieTitle = $(this).siblings(".form").text();
+
+    // send variable "Movie title" into fetch request
+    getMovieInfo(movieTitle);
+)}
