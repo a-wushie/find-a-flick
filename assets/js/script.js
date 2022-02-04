@@ -18,16 +18,15 @@ var getMovieInfo = function(movie) {
 
 var streamingAvailability = function (movie) {
 
+    // pull out imdbID for API fetch request
     var imdb_id = movie.imdbID;
-    var title = movie.Title; 
-
-    console.log(imdb_id);
-    console.log(title);
-
-    // add name to call for error message
+    // title for error message
+    var title = movie.title;
+ 
+    // assemble the endpoint URL
     var apiUrl = "https://streaming-availability.p.rapidapi.com/get/basic?country=us&imdb_id=" + imdb_id + "&output_language=en";
 
-
+    // call with the required header as a second argument
     fetch(apiUrl, {
         "method": "GET",
         "headers": {
@@ -39,10 +38,13 @@ var streamingAvailability = function (movie) {
         if (response.ok) {
             return response.json();
         } else {
-            var msg = ""
+            // pass error message if nothing returned by API
+            var msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
+            displayStreamingLinks(msg);
         }
         return response.json();
     }).then(function(data) {
+        // pass the data object if it was returned
         displayStreamingLinks(data);
     });
 
@@ -98,8 +100,31 @@ var displayMovieInfo = function(data) {
 
     document.body.appendChild(MOVIECONTAINER)
 
-}
+};
 
-var displayStreamingLinks = fucntion(data) {
+var displayStreamingLinks = function(data) {
 
-}
+    var title = data.title;
+    var msg = "";
+    var streaming[] = data.streamingInfo;
+
+    // if no streaming info is returned then set msg to to say as much, otherwise success
+    if (streaming[0] == null) {
+        msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
+    } else {
+        msg = "Thank you for using find-a-flick! Your selection of " + title + " is available to stream at:"
+    }
+
+    // container for the links
+    var linkContainer = document.createElement("div");
+
+    // populate the h2 header and append to container
+    var msgEl = document.createElement("h2")
+    msgEl.textContent = (successMsg);
+    linkContainer.appendChild(msgEl);
+
+    var linkBar = document.createElement("nav");
+
+    // for loop to populate and append the link buttons
+
+};
