@@ -16,6 +16,38 @@ var getMovieInfo = function(movie) {
     });
 };
 
+var streamingAvailability = function (movie) {
+
+    var imdb_id = movie.imdbID;
+    var title = movie.Title; 
+
+    console.log(imdb_id);
+    console.log(title);
+
+    // add name to call for error message
+    var apiUrl = "https://streaming-availability.p.rapidapi.com/get/basic?country=us&imdb_id=" + imdb_id + "&output_language=en";
+
+
+    fetch(apiUrl, {
+        "method": "GET",
+        "headers": {
+            "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
+            "x-rapidapi-key": "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d"
+        }
+    }).then(function (response) {
+
+        if (response.ok) {
+            console.log("return successful");
+        } else {
+            console.log("Nothing returned");
+        }
+        return response.json();
+    }).then(function(data) {
+        displayStreamingLinks(data);
+    });
+
+};
+
 var displayMovieInfo = function(data) {
     
     // Create a container to hold information from OMDB and display it
@@ -65,5 +97,9 @@ var displayMovieInfo = function(data) {
     MOVIECONTAINER.appendChild(plot)
 
     document.body.appendChild(MOVIECONTAINER)
+
+}
+
+var displayStreamingLinks = fucntion(data) {
 
 }
