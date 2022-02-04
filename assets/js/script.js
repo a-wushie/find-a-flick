@@ -69,6 +69,7 @@ var displayMovieInfo = function(data) {
 
 }
 
+
 $("#btn").click(function(event) {
     // Prevent page from reloading
     event.preventDefault();
@@ -78,4 +79,4 @@ $("#btn").click(function(event) {
 
     // send variable "Movie title" into fetch request
     getMovieInfo(movieTitle);
-)}
+})
