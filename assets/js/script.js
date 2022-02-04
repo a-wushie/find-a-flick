@@ -32,14 +32,14 @@ var streamingAvailability = function (movie) {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-            "x-rapidapi-key": "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d"
+            "x-rapidapi-key": "FILLER"
         }
     }).then(function (response) {
 
         if (response.ok) {
-            console.log("return successful");
+            return response.json();
         } else {
-            console.log("Nothing returned");
+            var msg = ""
         }
         return response.json();
     }).then(function(data) {
