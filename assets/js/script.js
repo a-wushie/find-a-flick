@@ -1,20 +1,28 @@
-var getMovieInfo = function(movie) {
+var getMovieInfo = function (movie) {
 
     // OMDB var
     var apiUrl = "http://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
 
     // get data through a fetch request
     fetch(apiUrl)
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(data) {
-        console.log(data);
-        // console.log(data.ratings[0]);
-        displayMovieInfo(data);
-        streamingAvailability(data);
-    });
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            console.log(data);
+            // console.log(data.ratings[0]);
+            displayMovieInfo(data);
+            streamingAvailability(data);
+        });
 };
+
+
+/*
+    We are aware that storing an ApiKey in the clear is not best practice. However we are using GitHub Pages and did not have access 
+    to a backend server to properly handle API keys, we are only using free APIs and are monitoring the application.  At the end of the project we will remove the API key.
+
+    *** maybe code a dialog box where the user enters the API key, not ideal but ok for now?  
+*/
 
 var streamingAvailability = function (movie) {
 
@@ -22,7 +30,7 @@ var streamingAvailability = function (movie) {
     var imdb_id = movie.imdbID;
     // title for error message
     var title = movie.title;
- 
+
     // assemble the endpoint URL
     var apiUrl = "https://streaming-availability.p.rapidapi.com/get/basic?country=us&imdb_id=" + imdb_id + "&output_language=en";
 
@@ -31,7 +39,7 @@ var streamingAvailability = function (movie) {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-            "x-rapidapi-key": ""
+            "x-rapidapi-key": "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d"
         }
     }).then(function (response) {
 
@@ -43,18 +51,15 @@ var streamingAvailability = function (movie) {
             var msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
             var noStreamEl = document.createElement("div");
-            var msgEl = document.createElement("p");
+            var msgEl = document.createElement("h2");
             msgEl.textContent = (msg);
 
             noStreamEl.appendChild(msgEl);
-
-            // NOT SURE WHAT I"LL BE APPENDING noStreamEL TO
-
             var noStreamEl = document.createElement(div);
             var msgEl = document.createElement(p);
             return;
         }
-    }).then(function(data) {
+    }).then(function (data) {
         console.log(data);
         console.log(data.streamingInfo);
         // pass the data object if it was returned
@@ -63,8 +68,8 @@ var streamingAvailability = function (movie) {
 
 };
 
-var displayMovieInfo = function(data) {
-    
+var displayMovieInfo = function (data) {
+
     // Create a container to hold information from OMDB and display it
     // Might be unnecessary IF it is hard coded in html 
     var MOVIECONTAINER = document.createElement("div")
@@ -115,52 +120,98 @@ var displayMovieInfo = function(data) {
 
 };
 
-var displayStreamingLinks = function(data) {
+var displayStreamingLinks = function (data) {
 
-    // array of streaming options to loop through when printing links 
-    var streamingOptions = ["disney", "netflix", "hbo", "prime", "hulu", "starz", "showtime", "peacock"];
-
-    var opt2test = data.streamingInfo.disney;
-
-    console.log(opt2test);
+    // title variable
     var title = data.title;
+    // empty string for success/failure msg
     var msg = "";
-    var streaming = data.streamingInfo;
-
-    // if no streaming info is returned then set msg to to say as much, otherwise success
-    if (streaming[0] == null) {
-        msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
-    } else {
-        msg = "Thank you for using find-a-flick! Your selection of " + title + " is available to stream at:"
-    }
 
     // container for the links
     var linkContainer = document.createElement("div");
 
     // populate the h2 header and append to container
     var msgEl = document.createElement("h2")
-    msgEl.textContent = (successMsg);
+    msgEl.textContent = (msg);
     linkContainer.appendChild(msgEl);
 
-    var linkBar = document.createElement("nav");
+    // create ul to house the list of links
+    var ulEl = document.createElement("ul");
 
+    // Use object.keys to create an array of the streaming options available 
+    var options = Object.keys(data.streamingInfo);
+    console.log(options);
 
-    // for loop to populate and append the link buttons
-    while (i != streamingOptions.length) {
-        var opt = streamingOptions
-        // spearate array to pull in the streaming options?
-        // or a while loop?
-        var link = data.streamingInfo.hbo;
-        var linkEl = document.createElement("a");
-        linkEl.setAttribute("href", link);
-    }; 
+    if (options[0] == null) {
+        // if options array is empty, then no streaming services were returned
+        // so create a failure message and display it to the user
+        msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
+        var linkContainer = document.createElement("div");
+
+        // populate the h2 header and append to container
+        var msgEl = document.createElement("h2")
+        msgEl.textContent = (msg);
+        linkContainer.appendChild(msgEl);
+
+        document.body.appendChild(linkContainer);
+
+    } else {
+        // if options array is not empty, then streaming services were returned
+        // create success message
+        msg = "Thank you for using find-a-flick! Your selection of " + title + " is available to stream at:"
+
+        var linkContainer = document.createElement("div");
+
+        // populate the h2 header and append to container
+        var msgEl = document.createElement("h2")
+        msgEl.textContent = (msg);
+        linkContainer.appendChild(msgEl);
+
+        // then loop through the array of options to access the link for each
+        // ex data.streamingInfo.netflix.us.link;
+        // with each iteration also save the text name of the option.
+        for (var i = 0; i < options.length; i++) {
+            var key = options[i];
+            var link = data.streamingInfo[key].us.link;
+
+            // save the streaming option as a string
+            var tempString = options[i];
+
+            // then use charAt() to split off the first character into its own string and capitalize it with toUpperCase
+            // then concatenate that with everything after the first character in tempString
+            // to receive the service name capitalized.
+            var serviceName = tempString.charAt(0).toUpperCase() + tempString.slice(1);
+
+            // create list item and link el
+            var optEl = document.createElement("li");
+            var linkEl = document.createElement("a");
+
+            // set link to link ul to go to the streaming service and correct name
+            linkEl.setAttribute("href", link);
+            linkEl.textContent = (serviceName);
+            optEl.appendChild(linkEl);
+            ulEl.appendChild(optEl);
+        };
+
+        var serviceLinks = document.createElement("nav");
+        serviceLinks.appendChild(ulEl);
+
+        linkContainer.appendChild(serviceLinks);
+
+        document.body.appendChild(linkContainer);
+    }
 };
 
+/*
+if not gitHub you can use a seprate javascript.
 
-var test = function (){
+*/
 
-    var testStr = "carnival row";
+
+var test = function () {
+
+    var testStr = "simpsons";
 
     getMovieInfo(testStr);
 };
