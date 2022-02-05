@@ -1,5 +1,3 @@
-// variables 
-
 var getMovieInfo = function(movie) {
 
     // OMDB var
@@ -11,6 +9,8 @@ var getMovieInfo = function(movie) {
         return response.json();
     })
     .then(function(data) {
+        console.log(data);
+        // console.log(data.ratings[0]);
         displayMovieInfo(data);
         streamingAvailability(data);
     });
@@ -31,19 +31,32 @@ var streamingAvailability = function (movie) {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-            "x-rapidapi-key": "FILLER"
+            "x-rapidapi-key": ""
         }
     }).then(function (response) {
 
         if (response.ok) {
             return response.json();
         } else {
-            // pass error message if nothing returned by API
+
+            // create error message if nothing returned.
             var msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
-            displayStreamingLinks(msg);
+
+            var noStreamEl = document.createElement("div");
+            var msgEl = document.createElement("p");
+            msgEl.textContent = (msg);
+
+            noStreamEl.appendChild(msgEl);
+
+            // NOT SURE WHAT I"LL BE APPENDING noStreamEL TO
+
+            var noStreamEl = document.createElement(div);
+            var msgEl = document.createElement(p);
+            return;
         }
-        return response.json();
     }).then(function(data) {
+        console.log(data);
+        console.log(data.streamingInfo);
         // pass the data object if it was returned
         displayStreamingLinks(data);
     });
@@ -104,9 +117,15 @@ var displayMovieInfo = function(data) {
 
 var displayStreamingLinks = function(data) {
 
+    // array of streaming options to loop through when printing links 
+    var streamingOptions = ["disney", "netflix", "hbo", "prime", "hulu", "starz", "showtime", "peacock"];
+
+    var opt2test = data.streamingInfo.disney;
+
+    console.log(opt2test);
     var title = data.title;
     var msg = "";
-    var streaming[] = data.streamingInfo;
+    var streaming = data.streamingInfo;
 
     // if no streaming info is returned then set msg to to say as much, otherwise success
     if (streaming[0] == null) {
@@ -125,6 +144,23 @@ var displayStreamingLinks = function(data) {
 
     var linkBar = document.createElement("nav");
 
-    // for loop to populate and append the link buttons
 
+    // for loop to populate and append the link buttons
+    while (i != streamingOptions.length) {
+        var opt = streamingOptions
+        // spearate array to pull in the streaming options?
+        // or a while loop?
+        var link = data.streamingInfo.hbo;
+        var linkEl = document.createElement("a");
+        linkEl.setAttribute("href", link);
+    }; 
+
+};
+
+
+var test = function (){
+
+    var testStr = "carnival row";
+
+    getMovieInfo(testStr);
 };
