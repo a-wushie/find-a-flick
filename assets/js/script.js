@@ -1,28 +1,22 @@
-var getMovieInfo = function (movie) {
+
+// variables 
+var searchButtonEl = document.getElementsByClassName("btn")
+
+var getMovieInfo = function(movie) {
 
     // OMDB var
     var apiUrl = "http://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
 
     // get data through a fetch request
     fetch(apiUrl)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
-            console.log(data);
-            // console.log(data.ratings[0]);
-            displayMovieInfo(data);
-            streamingAvailability(data);
-        });
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        displayMovieInfo(data);
+        streamingAvailability(data);
+    });
 };
-
-
-/*
-    We are aware that storing an ApiKey in the clear is not best practice. However we are using GitHub Pages and did not have access 
-    to a backend server to properly handle API keys, we are only using free APIs and are monitoring the application.  At the end of the project we will remove the API key.
-
-    *** maybe code a dialog box where the user enters the API key, not ideal but ok for now?  
-*/
 
 var streamingAvailability = function (movie) {
 
@@ -39,7 +33,7 @@ var streamingAvailability = function (movie) {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-            "x-rapidapi-key": "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d"
+            "x-rapidapi-key": "FILLER"
         }
     }).then(function (response) {
 
@@ -68,8 +62,8 @@ var streamingAvailability = function (movie) {
 
 };
 
-var displayMovieInfo = function (data) {
-
+var displayMovieInfo = function(data) {
+    
     // Create a container to hold information from OMDB and display it
     // Might be unnecessary IF it is hard coded in html 
     var MOVIECONTAINER = document.createElement("div")
@@ -118,7 +112,7 @@ var displayMovieInfo = function (data) {
 
     document.body.appendChild(MOVIECONTAINER)
 
-};
+}
 
 var displayStreamingLinks = function (data) {
 
@@ -138,7 +132,7 @@ var displayStreamingLinks = function (data) {
     // create ul to house the list of links
     var ulEl = document.createElement("ul");
 
-    // Use object.keys to create an array of the streaming options available 
+    // Use object.keys to create an array of the names of the streaming options available 
     var options = Object.keys(data.streamingInfo);
     console.log(options);
 
@@ -169,7 +163,7 @@ var displayStreamingLinks = function (data) {
         linkContainer.appendChild(msgEl);
 
         // then loop through the array of options to access the link for each
-        // ex data.streamingInfo.netflix.us.link;
+        // ex data.streamingInfo[key = netflix].us.link;
         // with each iteration also save the text name of the option.
         for (var i = 0; i < options.length; i++) {
             var key = options[i];
@@ -203,15 +197,13 @@ var displayStreamingLinks = function (data) {
     }
 };
 
-/*
-if not gitHub you can use a seprate javascript.
+$("#btn").click(function(event) {
+    // Prevent page from reloading
+    event.preventDefault();
 
-*/
+    // Set sibling form text value to variable
+    var movieTitle = $(this).siblings(".form").text();
 
-
-var test = function () {
-
-    var testStr = "simpsons";
-
-    getMovieInfo(testStr);
-};
+    // send variable "Movie title" into fetch request
+    getMovieInfo(movieTitle);
+})
