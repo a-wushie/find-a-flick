@@ -4,7 +4,6 @@ var searchButtonEl = document.getElementsByClassName("btn");
 
 var getMovieInfo = function(movie) {
 
-    console.log(movie);
     // OMDB var
     var apiUrl = "http://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
 
@@ -14,10 +13,8 @@ var getMovieInfo = function(movie) {
         return response.json();
     })
     .then(function(data) {
-        console.log(data);
 
         var tempStr = data.Response
-        console.log(tempStr);
         displayMovieInfo(data);
         streamingAvailability(data);
     });
@@ -27,8 +24,8 @@ var streamingAvailability = function (movie) {
 
     // pull out imdbID for API fetch request
     var imdb_id = movie.imdbID;
-    // title for error message
-    var title = movie.title;
+    // pull title for error message
+    var title = movie.Title;
 
     // assemble the endpoint URL
     var apiUrl = "https://streaming-availability.p.rapidapi.com/get/basic?country=us&imdb_id=" + imdb_id + "&output_language=en";
@@ -45,8 +42,7 @@ var streamingAvailability = function (movie) {
         if (response.ok) {
             return response.json();
         } else {
-
-            // create error message if nothing returned.
+            // create error message if 404 error / no object returned.
             var msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
             var noStreamEl = document.createElement("div");
@@ -54,13 +50,11 @@ var streamingAvailability = function (movie) {
             msgEl.textContent = (msg);
 
             noStreamEl.appendChild(msgEl);
-            var noStreamEl = document.createElement(div);
-            var msgEl = document.createElement(p);
+
+            document.body.appendChild(noStreamEl)
             return;
         }
     }).then(function (data) {
-        console.log(data);
-        console.log(data.streamingInfo);
         // pass the data object if it was returned
         displayStreamingLinks(data);
     });
@@ -121,7 +115,7 @@ var displayMovieInfo = function(data) {
 
 var displayStreamingLinks = function (data) {
 
-    // title variable
+    // title variable case sensitive and title is not captialized in the streaming-availability object
     var title = data.title;
     // empty string for success/failure msg
     var msg = "";
@@ -139,10 +133,9 @@ var displayStreamingLinks = function (data) {
 
     // Use object.keys to create an array of the names of the streaming options available 
     var options = Object.keys(data.streamingInfo);
-    console.log(options);
 
     if (options[0] == null) {
-        // if options array is empty, then no streaming services were returned
+        // if options array is empty, then teh object was returned and no streaming services were found
         // so create a failure message and display it to the user
         msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
@@ -175,8 +168,6 @@ var displayStreamingLinks = function (data) {
             var link = data.streamingInfo[key].us.link;
 
             var newTab = "_blank";
-            console.log(options[i]);
-            console.log(link);
 
             // save the streaming option as a string
             var tempString = options[i];
@@ -208,12 +199,18 @@ var displayStreamingLinks = function (data) {
     }
 };
 
+/*
+// add onload="test()" to html
 var test = function (){
-    var testStr = "simpsons"
+    var testStr = "That 70s Show"
 
     getMovieInfo(testStr);
+    // That 70s Show returns an object but no streaming
+    // Simpsons returns multiple streaming options
+    // Wallace and Gromit 404s and doesen't return an object
     
 };
+*/
 
 $("#btn").click(function(event) {
     // Prevent page from reloading
