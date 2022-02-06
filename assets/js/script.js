@@ -1,9 +1,10 @@
 
 // variables 
-var searchButtonEl = document.getElementsByClassName("btn")
+var searchButtonEl = document.getElementsByClassName("btn");
 
 var getMovieInfo = function(movie) {
 
+    console.log(movie);
     // OMDB var
     var apiUrl = "http://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
 
@@ -13,6 +14,10 @@ var getMovieInfo = function(movie) {
         return response.json();
     })
     .then(function(data) {
+        console.log(data);
+
+        var tempStr = data.Response
+        console.log(tempStr);
         displayMovieInfo(data);
         streamingAvailability(data);
     });
@@ -33,7 +38,7 @@ var streamingAvailability = function (movie) {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-            "x-rapidapi-key": "FILLER"
+            "x-rapidapi-key": "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d"
         }
     }).then(function (response) {
 
@@ -112,7 +117,7 @@ var displayMovieInfo = function(data) {
 
     document.body.appendChild(MOVIECONTAINER)
 
-}
+};
 
 var displayStreamingLinks = function (data) {
 
@@ -169,6 +174,10 @@ var displayStreamingLinks = function (data) {
             var key = options[i];
             var link = data.streamingInfo[key].us.link;
 
+            var newTab = "_blank";
+            console.log(options[i]);
+            console.log(link);
+
             // save the streaming option as a string
             var tempString = options[i];
 
@@ -181,8 +190,10 @@ var displayStreamingLinks = function (data) {
             var optEl = document.createElement("li");
             var linkEl = document.createElement("a");
 
-            // set link to link ul to go to the streaming service and correct name
+            // set link to linkS href to go to the streaming service and correct name
             linkEl.setAttribute("href", link);
+            // set target to _blank so link opens a new tab
+            linkEl.setAttribute("target", newTab);
             linkEl.textContent = (serviceName);
             optEl.appendChild(linkEl);
             ulEl.appendChild(optEl);
@@ -197,6 +208,13 @@ var displayStreamingLinks = function (data) {
     }
 };
 
+var test = function (){
+    var testStr = "simpsons"
+
+    getMovieInfo(testStr);
+    
+};
+
 $("#btn").click(function(event) {
     // Prevent page from reloading
     event.preventDefault();
@@ -206,4 +224,5 @@ $("#btn").click(function(event) {
 
     // send variable "Movie title" into fetch request
     getMovieInfo(movieTitle);
-})
+});
+
