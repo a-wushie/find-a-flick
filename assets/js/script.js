@@ -2,7 +2,7 @@
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
 
-var getMovieInfo = function(movie) {
+var getMovieInfo = function(movie, key) {
 
     // OMDB var
     var apiUrl = "http://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
@@ -13,15 +13,14 @@ var getMovieInfo = function(movie) {
         return response.json();
     })
     .then(function(data) {
-
-        var tempStr = data.Response
         displayMovieInfo(data);
-        streamingAvailability(data);
+        streamingAvailability(data, key);
     });
 };
 
-var streamingAvailability = function (movie) {
+var streamingAvailability = function (movie, key) {
 
+    
     // pull out imdbID for API fetch request
     var imdb_id = movie.imdbID;
     // pull title for error message
@@ -35,7 +34,7 @@ var streamingAvailability = function (movie) {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-            "x-rapidapi-key": "FILLER"
+            "x-rapidapi-key": key
         }
     }).then(function (response) {
 
@@ -202,15 +201,14 @@ var displayStreamingLinks = function (data) {
 /*
 // add onload="test()" to html
 var test = function (){
-    var testStr = "That 70s Show"
-
-    getMovieInfo(testStr);
+    var testStr = "Simpsons"
+    var key = "";
+    getMovieInfo(testStr, key);
     // That 70s Show returns an object but no streaming
     // Simpsons returns multiple streaming options
     // Wallace and Gromit 404s and doesen't return an object
-    
-};
-*/
+};*/
+
 
 $("#btn").click(function(event) {
     // Prevent page from reloading
@@ -219,7 +217,10 @@ $("#btn").click(function(event) {
     // Set sibling form text value to variable
     var movieTitle = $(this).siblings(".form").text();
 
+    // Grab user entered API Key and pass along
+    var key = $("#api-key").text(); 
+
     // send variable "Movie title" into fetch request
-    getMovieInfo(movieTitle);
+    getMovieInfo(movieTitle, key);
 });
 
