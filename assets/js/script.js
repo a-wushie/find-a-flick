@@ -1,6 +1,6 @@
 
 // variables 
-var searchButtonEl = document.getElementsByClassName("btn");
+var searchButtonEl = document.getElementsByClassName("btn")
 
 var getMovieInfo = function(movie, key) {
 
@@ -223,4 +223,3 @@ $("#btn").click(function(event) {
     // send variable "Movie title" into fetch request
     getMovieInfo(movieTitle, key);
 });
-
