@@ -13,8 +13,16 @@ var getMovieInfo = function(movie, key) {
         return response.json();
     })
     .then(function(data) {
-        displayMovieInfo(data);
-        streamingAvailability(data, key);
+        // Check to see if the response comes back as true or false
+        if (data.Response === 'False') {
+            alert("Please Enter a valid Movie Title!")
+        } else {
+            displayMovieInfo(data);
+            streamingAvailability(data, key);
+        }
+    })
+    .catch(function(error) {
+        alert("Unable to connect to server!")
     });
 };
 
