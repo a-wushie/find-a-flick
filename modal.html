@@ -1,16 +1,132 @@
-<div class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-      <header class="modal-card-head">
-        <p class="modal-card-title">Modal title</p>
-        <button class="delete" aria-label="close"></button>
-      </header>
-      <section class="modal-card-body">
-        <!-- Content ... -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script src="https://kit.fontawesome.com/fbe06f4a65.js" crossorigin="anonymous"></script>
+    <title>Find-A-Flick</title>
+</head>
+
+<body>
+
+    <!-- navigation bar -->
+    <nav class="navbar is-link" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+
+          <a class="navbar-item" href="index.html">
+            <i class="fas fa-film"></i>Find-a-Flick 
+          </a>
+      
+          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
+        </div>
+      
+        <div id="" class="navbar-menu">
+          <div class="navbar-start">
+      
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link">
+                Recent Searches
+              </a>
+      
+              <div class="navbar-dropdown">
+                <a class="navbar-item" href="">
+                  previous search
+                </a>
+                <a class="navbar-item" href="">
+                  another search
+                </a>
+                <a class="navbar-item" href="">
+                  search before that
+                </a>
+              </div>
+            </div>
+          </div>
+      
+          <div class="navbar-end">
+            <div class="navbar-item">
+            </div>
+          </div>
+        </div>
+      </nav>
+    
+      <!-- <section class="section is-large">
+        <h1 class="title">Enter your movie here</h1>
+        <h2 class="subtitle">
+            Find-a-Flick will find where you can stream this and stats about your movie
+            <span>
+                <button class="button is-medium is-link js-modal-trigger" data-target="modal-js-example">
+                    <strong>Search</strong>
+                  </button>
+            </span>
+        </h2>
+      </section> -->
+
+      <section class="hero is-fullheight-with-navbar">
+        <div class="hero-body">
+          <div class="hero-content">
+              <figure>
+                  <img src="./assets/images/couple.jpg">
+              </figure>
+              <h1 class="title">Enter your movie here</h1>
+          <h2 class="subtitle">
+              Find-a-Flick will find where you can stream this and stats about your movie
+              <span>
+                  <button class="button is-medium is-link js-modal-trigger" data-target="modal-js-example">
+                      <strong>Search</strong>
+                    </button>
+              </span>
+        </h2>
+          </div>
+      </div>
       </section>
-      <footer class="modal-card-foot">
-        <button class="button is-success">Save changes</button>
-        <button class="button">Cancel</button>
-      </footer>
-    </div>
-  </div>
+
+    <!-- <section class="hero is-fullheight">
+        <div class="box">
+            <div class="field">
+                <label class="label">Enter a Movie Title</label>
+                <input class="input is-link" type="text" placeholder="eg: The Secret Life of Walter Mitty"/>
+            </div>
+        </div>
+    </section> -->
+    
+    <!-- modal for search results -->
+    <div class="modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title">Modal title</p>
+            <button class="delete" aria-label="close"></button>
+          </header>
+          <section class="modal-card-body">
+            <!-- Content ... -->
+          </section>
+          <footer class="modal-card-foot">
+            <button class="button is-success">Save changes</button>
+            <button class="button">Cancel</button>
+          </footer>
+        </div>
+      </div>
+  
+  <script src="./assets/js/modal-script.js"></script>
+</body>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+        <p>
+            <strong>Find-A-Flick</strong> by Group 7.
+            <br> 
+            The source code is licensed
+            <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
+        </p>
+        </div>
+    </footer>
+
+</html>
