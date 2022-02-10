@@ -10,14 +10,24 @@ var getMovieInfo = function (movie) {
 
     // get data through a fetch request
     fetch(apiUrl)
-        .then(function (response) {
-            return response.json();
-        })
-        .then(function (data) {
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+
+        // Check to see if the response comes back as true or false
+        if (data.Response === 'False') {
+            alert("Please Enter a valid Movie Title!")
+        } else {
+            console.log(data)
             displayMovieInfo(data);
-            console.log(data);
-            streamingAvailability(data, api);
-        });
+            streamingAvailability(data, key);
+        }
+    })
+    .catch(function(error) {
+        console.log(error)
+        alert("Unable to connect to server!")
+    });
 };
 
 var streamingAvailability = function (movie) {
@@ -70,50 +80,38 @@ var displayMovieInfo = function (data) {
     // document.getElementById("test").innerHTML = "";
 
     // Create a container to hold information from OMDB and display it
-    // Might be unnecessary IF it is hard coded in html 
-    var MOVIECONTAINER = document.createElement("div")
 
     // Create a title element
-    var filmTitle = document.createElement("h2")
+    var filmTitle = document.querySelector('#movieTitle')
     // set text to title value from omdb
     filmTitle.textContent = (data.Title)
-    // Append to the page
-    MOVIECONTAINER.appendChild(filmTitle)
 
     // Create an img element 
-    var poster = document.createElement("img")
+    var poster = document.querySelector('#movieImg')
     // set source of img as link for poster from omdb
+    console.log(data.Poster)
     poster.setAttribute("src", data.Poster)
-    // Append to the page
-    MOVIECONTAINER.appendChild(poster)
 
     // Create text for Year
-    var year = document.createElement('p')
+    var year = document.querySelector('#movieYear')
     // set text of the year to value form omdb
     year.textContent = ("Released: " + data.Year)
-    // Append to the page
-    MOVIECONTAINER.appendChild(year)
 
     // Create text for Rated
-    var rated = document.createElement('p')
+    var rated = document.querySelector('#movieRated')
     // set text to rated value from omdb
     rated.textContent = ("Rated: " + data.Rated)
-    // Append to the page
-    MOVIECONTAINER.appendChild(rated)
 
     // Create text for Runtime
-    var runtime = document.createElement("p")
+    var runtime = document.querySelector('#movieRuntime')
     // set text to runtime from omdb
     runtime.textContent = ("Runtime: " + data.Runtime)
-    // Append to the page
-    MOVIECONTAINER.appendChild(runtime)
+
 
     // Create text for Plot
-    var plot = document.createElement("p")
+    var plot = document.querySelector('#moviePlot')
     // set text for plot from omdb
     plot.textContent = (data.Plot)
-    // Append to the page
-    MOVIECONTAINER.appendChild(plot)
 
 };
 
@@ -126,8 +124,6 @@ var displayStreamingLinks = function (data) {
     // empty string for success/failure msg
     var msg = "";
 
-    console.log(Object.keys(data.streamingInfo));
-
     // Use object.keys to create an array of the names of the streaming options available 
     var options = Object.keys(data.streamingInfo);
 
@@ -136,8 +132,6 @@ var displayStreamingLinks = function (data) {
         // if options array is empty, then teh object was returned and no streaming services were found
         // so create a failure message and display it to the user
         msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
-
-    
 
         // populate the h2 header and append to container
         var msgEl = document.createElement("h2")
@@ -151,7 +145,7 @@ var displayStreamingLinks = function (data) {
         // create success message
         msg = "Thank you for using find-a-flick! Your selection of " + title + " is available to stream at:"
 
-        var linkContainer = document.createElement("div");
+        var linkContainer = document.createElement('watchOptions');
 
         // populate the h2 header and append to container
         var msgEl = document.createElement("h2")
@@ -177,7 +171,7 @@ var displayStreamingLinks = function (data) {
 
             // create list item and link el
             var optEl = document.createElement("li");
-            var linkEl = document.createElement("a");
+            var linkEl = document.createElement('streamingLink');
 
             // set link to linkS href to go to the streaming service and correct name
             linkEl.setAttribute("href", link);
@@ -237,8 +231,8 @@ $("#btn").click(function (event) {
     getMovieInfo(movieTitle, key);
 });
 
-
 $(".navbar-item").click(function (event) {
+
     // Prevent page from reloading
     event.preventDefault();
     console.log("triggered")
@@ -256,3 +250,4 @@ $(".navbar-item").click(function (event) {
     getMovieInfo(movieTitle, api)
 
 });
+
