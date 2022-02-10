@@ -73,45 +73,45 @@ var displayMovieInfo = function(data) {
     
     // Create a container to hold information from OMDB and display it
     // Might be unnecessary IF it is hard coded in html 
-    var MOVIECONTAINER = document.createElement("div")
+    var MOVIECONTAINER = document.createElement('infoContainer')
 
     // Create a title element
-    var filmTitle = document.createElement("h2")
+    var filmTitle = document.createElement('movieTitle')
     // set text to title value from omdb
     filmTitle.textContent = (data.Title)
     // Append to the page
     MOVIECONTAINER.appendChild(filmTitle)
 
     // Create an img element 
-    var poster = document.createElement("img")
+    var poster = document.createElement('movieImg')
     // set source of img as link for poster from omdb
     poster.setAttribute("src", data.Poster)
     // Append to the page
     MOVIECONTAINER.appendChild(poster)
 
     // Create text for Year
-    var year = document.createElement('p')
+    var year = document.createElement('movieYear')
     // set text of the year to value form omdb
     year.textContent = ("Released: " + data.Year)
     // Append to the page
     MOVIECONTAINER.appendChild(year)
 
     // Create text for Rated
-    var rated = document.createElement('p')
+    var rated = document.createElement('movieRated')
     // set text to rated value from omdb
     rated.textContent = ("Rated: " + data.Rated)
     // Append to the page
     MOVIECONTAINER.appendChild(rated)
 
     // Create text for Runtime
-    var runtime = document.createElement("p")
+    var runtime = document.createElement('movieRuntime')
     // set text to runtime from omdb
     runtime.textContent = ("Runtime: " + data.Runtime)
     // Append to the page
     MOVIECONTAINER.appendChild(runtime)
 
     // Create text for Plot
-    var plot = document.createElement("p")
+    var plot = document.createElement('moviePlot')
     // set text for plot from omdb
     plot.textContent = (data.Plot)
     // Append to the page
@@ -129,15 +129,16 @@ var displayStreamingLinks = function (data) {
     var msg = "";
 
     // container for the links
-    var linkContainer = document.createElement("div");
+    var linkContainer = document.createElement('watchOptions');
 
     // populate the h2 header and append to container
-    var msgEl = document.createElement("h2")
+    var msgEl = document.createElement("div")
+    msgEl.classList=("streamingMessage")
     msgEl.textContent = (msg);
     linkContainer.appendChild(msgEl);
 
     // create ul to house the list of links
-    var ulEl = document.createElement("ul");
+    var ulEl = document.createElement('linkList');
 
     // Use object.keys to create an array of the names of the streaming options available 
     var options = Object.keys(data.streamingInfo);
@@ -147,7 +148,7 @@ var displayStreamingLinks = function (data) {
         // so create a failure message and display it to the user
         msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
-        var linkContainer = document.createElement("div");
+        var linkContainer = document.createElement('watchOptions');
 
         // populate the h2 header and append to container
         var msgEl = document.createElement("h2")
@@ -161,7 +162,7 @@ var displayStreamingLinks = function (data) {
         // create success message
         msg = "Thank you for using find-a-flick! Your selection of " + title + " is available to stream at:"
 
-        var linkContainer = document.createElement("div");
+        var linkContainer = document.createElement('watchOptions');
 
         // populate the h2 header and append to container
         var msgEl = document.createElement("h2")
@@ -187,7 +188,7 @@ var displayStreamingLinks = function (data) {
 
             // create list item and link el
             var optEl = document.createElement("li");
-            var linkEl = document.createElement("a");
+            var linkEl = document.createElement('streamingLink');
 
             // set link to linkS href to go to the streaming service and correct name
             linkEl.setAttribute("href", link);
