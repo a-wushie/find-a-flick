@@ -1,27 +1,36 @@
+/*Notes
+Elements are beign appended to a test div
+need to edit to append to the modal card
 
+Dynamically created elements need bulma css classes
+
+
+
+*/
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
+var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
 
-var getMovieInfo = function(movie, key) {
+var getMovieInfo = function (movie) {
 
     // OMDB var
     var apiUrl = "http://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
 
     // get data through a fetch request
     fetch(apiUrl)
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(data) {
-        displayMovieInfo(data);
-        console.log(data);
-        streamingAvailability(data, key);
-    });
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            displayMovieInfo(data);
+            console.log(data);
+            streamingAvailability(data, key);
+        });
 };
 
-var streamingAvailability = function (movie, key) {
+var streamingAvailability = function (movie) {
 
-    
+
     // pull out imdbID for API fetch request
     var imdb_id = movie.imdbID;
     // pull title for error message
@@ -35,7 +44,7 @@ var streamingAvailability = function (movie, key) {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-            "x-rapidapi-key": key
+            "x-rapidapi-key": api
         }
     }).then(function (response) {
 
@@ -61,8 +70,10 @@ var streamingAvailability = function (movie, key) {
 
 };
 
-var displayMovieInfo = function(data) {
-    
+var displayMovieInfo = function (data) {
+
+    document.getElementById("test").innerHTML = "";
+
     // Create a container to hold information from OMDB and display it
     // Might be unnecessary IF it is hard coded in html 
     var MOVIECONTAINER = document.createElement("div")
@@ -109,12 +120,15 @@ var displayMovieInfo = function(data) {
     // Append to the page
     MOVIECONTAINER.appendChild(plot)
 
-    document.body.appendChild(MOVIECONTAINER)
+    // document.getElementById("#test").innerHTML = "";
+    // put at the top of each html creation to clear the contents
+    
+    document.getElementById("test").appendChild(MOVIECONTAINER);
 
 };
 
 var displayStreamingLinks = function (data) {
-
+    
     // title variable case sensitive and title is not captialized in the streaming-availability object
     var title = data.title;
     // empty string for success/failure msg
@@ -146,7 +160,7 @@ var displayStreamingLinks = function (data) {
         msgEl.textContent = (msg);
         linkContainer.appendChild(msgEl);
 
-        document.body.appendChild(linkContainer);
+        document.getElementById("test").appendChild(linkContainer);
 
     } else {
         // if options array is not empty, then streaming services were returned
@@ -195,19 +209,25 @@ var displayStreamingLinks = function (data) {
 
         linkContainer.appendChild(serviceLinks);
 
-        document.body.appendChild(linkContainer);
+        document.getElementById("test").appendChild(linkContainer);
     }
 };
 
 
 // add onload="test()" to html
-var test = function (){
+var test = function () {
     var testStr = "Simpsons";
-    var key = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
+    var testStr2 = "Ghostbusters";
+    var testStr3 = "Dark"
     console.log(1);
-    getMovieInfo(testStr, key);
+    // getMovieInfo(testStr, api);
     console.log(2);
     saveSearch(testStr);
+
+    getMovieInfo(testStr2, api);
+    saveSearch(testStr2);
+
+    saveSearch(testStr3);
     // That 70s Show returns an object but no streaming
     // Simpsons returns multiple streaming options
     // Wallace and Gromit 404s and doesen't return an object
@@ -223,7 +243,7 @@ var saveSearch = function (title) {
     // create past search element to append to the nav dropdown
     var pastSearch = document.createElement("a");
     pastSearch.setAttribute("id", key);
-    pastSearch.setAttribute("class", "navbar-item");
+    pastSearch.setAttribute("class", "navbar-item nav-search");
     pastSearch.textContent = (title);
 
     // append the elment to nav dropdown
@@ -231,7 +251,7 @@ var saveSearch = function (title) {
 };
 
 
-$("#btn").click(function(event) {
+$("#btn").click(function (event) {
     // Prevent page from reloading
     event.preventDefault();
 
@@ -239,19 +259,19 @@ $("#btn").click(function(event) {
     var movieTitle = $(this).siblings(".form").text();
 
     // Grab user entered API Key and pass along
-    var key = $("#api-key").text(); 
+    var key = $("#api-key").text();
 
     // send variable "Movie title" into fetch request
     getMovieInfo(movieTitle, key);
 });
 
 
-$(".navbar-item").click(function(event) {
+$(".navbar-item").click(function (event) {
     // Prevent page from reloading
     event.preventDefault();
     console.log("triggered")
 
-    var key = $(this).attr("id");
+    var key = event.target.id; 
     console.log(key);
 
     // pull key from local storage
@@ -260,7 +280,7 @@ $(".navbar-item").click(function(event) {
     // pull title from local storage. 
     var movieTitle = JSON.parse(localStorage.getItem(key));
     console.log(movieTitle);
-    
+
     getMovieInfo(movieTitle, api)
 
 });

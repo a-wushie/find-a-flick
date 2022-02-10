@@ -10,7 +10,7 @@
     <title>Find-A-Flick</title>
 </head>
 
-<body>
+<body onload="test()">
 
     <!-- navigation bar -->
     <nav class="navbar is-link" role="navigation" aria-label="main navigation">
@@ -37,13 +37,13 @@
               </a>
       
               <div class="navbar-dropdown" id="recent-search">
-                <a id="1" class="navbar-item" href="">
+                <a class="navbar-item nav-search" href="">
                   previous search
                 </a>
-                <a id="2" class="navbar-item" href="">
+                <a class="navbar-item nav-search" href="">
                   another search
                 </a>
-                <a class="navbar-item" href="">
+                <a class="navbar-item nav-search" href="">
                   search before that
                 </a>
               </div>
@@ -87,6 +87,9 @@
             </div>
         </div>
     </section> -->
+    <section id="test">
+      Show results here 
+    </section>
     
     <!-- modal for search results -->
     <div class="modal">
@@ -96,7 +99,7 @@
             <p class="modal-card-title">Modal title</p>
             <button class="delete" aria-label="close"></button>
           </header>
-          <section class="modal-card-body">
+          <section  class="modal-card-body">
             <!-- Content ... -->
           </section>
           <footer class="modal-card-foot">
@@ -105,7 +108,9 @@
           </footer>
         </div>
       </div>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
       <script src="./assets/js/script.js"></script>
+      <script src="./assets/js/modal-script.js"></script>
 </body>
 
     <footer class="footer">
