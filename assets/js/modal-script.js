@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Add a click event on buttons to open a specific modal
     const modal = document.querySelector(".modal")
     const searchBtn = document.querySelector(".js-modal-trigger")
-    const searchResult = document.querySelector('.is-link')
+    const searchResult = document.querySelector('.input')
 
     searchBtn.addEventListener('click', (e) => {
       e.preventDefault();
-      
+
       var searchItem = searchResult.value
       console.log(searchResult.value)
       
