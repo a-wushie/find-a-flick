@@ -13,6 +13,7 @@ var getMovieInfo = function(movie, key) {
         return response.json();
     })
     .then(function(data) {
+
         // Check to see if the response comes back as true or false
         if (data.Response === 'False') {
             alert("Please Enter a valid Movie Title!")
@@ -206,16 +207,36 @@ var displayStreamingLinks = function (data) {
     }
 };
 
-/*
+
 // add onload="test()" to html
 var test = function (){
-    var testStr = "Simpsons"
-    var key = "";
+    var testStr = "Simpsons";
+    var key = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
+    console.log(1);
     getMovieInfo(testStr, key);
+    console.log(2);
+    saveSearch(testStr);
     // That 70s Show returns an object but no streaming
     // Simpsons returns multiple streaming options
     // Wallace and Gromit 404s and doesen't return an object
-};*/
+};
+
+var saveSearch = function (title) {
+    // length + 1 so nothing is overwritten
+    key = localStorage.length + 1;
+    var value = title;
+    // save user entered title and key to local storage
+    localStorage.setItem(key, JSON.stringify(value));
+
+    // create past search element to append to the nav dropdown
+    var pastSearch = document.createElement("a");
+    pastSearch.setAttribute("id", key);
+    pastSearch.setAttribute("class", "navbar-item");
+    pastSearch.textContent = (title);
+
+    // append the elment to nav dropdown
+    document.getElementById("recent-search").appendChild(pastSearch);
+};
 
 
 $("#btn").click(function(event) {
@@ -231,3 +252,23 @@ $("#btn").click(function(event) {
     // send variable "Movie title" into fetch request
     getMovieInfo(movieTitle, key);
 });
+
+$(".navbar-item").click(function(event) {
+    // Prevent page from reloading
+    event.preventDefault();
+    console.log("triggered")
+
+    var key = $(this).attr("id");
+    console.log(key);
+
+    // pull key from local storage
+    var api = JSON.parse(localStorage.getItem(key));
+
+    // pull title from local storage. 
+    var movieTitle = JSON.parse(localStorage.getItem(key));
+    console.log(movieTitle);
+    
+    getMovieInfo(movieTitle, api)
+
+});
+
