@@ -1,78 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
-
-  <title>Find-A-Flick</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script src="https://kit.fontawesome.com/fbe06f4a65.js" crossorigin="anonymous"></script>
+    <title>Find-A-Flick</title>
 </head>
 
 <body>
-  <nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-      <a class="navbar-item" href="https://find-a-flick.io">
-        <img src="./assets/images/movie-streaming-logo.png" width="112" height="28" alt="find-a-flick logo">
-      </a>
 
-      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-      </a>
-    </div>
+    <!-- navigation bar -->
+    <nav class="navbar is-link" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
 
-    <div id="navbarBasicExample" class="navbar-menu">
-      <div class="navbar-start">
-        <a class="navbar-item">
-          Home
-        </a>
-      </div>
-    </div>
-
-    <div class="navbar-end">
-      <div class="navbar-item">
-        <div class="buttons">
-          <a class="button is-primary">
-            <strong>Search</strong>
+          <a class="navbar-item" href="index.html">
+            <i class="fas fa-film"></i>Find-a-Flick 
           </a>
+      
+          <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+
         </div>
-      </div>
-    </div>
-  </nav>
-
-  <section>
-    <div class="columns">
-      <div class="column">
-        Search column
-      </div>
-
-      <!-- Results Column -->
-      <div class="column is-three-quarters m-2">
-        <div class="row box">
-          <h2 class="movieTitle is-size-2 has-text-centered has-text-weight-bold">Movie Title</h2>
-          <div class="columns">
-            <div class="column">
-              <img class="movieImg" src="" width="200" height="350" alt="Image of the Movie">
+      
+        <div id="" class="navbar-menu">
+          <div class="navbar-start">
+      
+            <div class="navbar-item has-dropdown is-hoverable">
+              <a class="navbar-link">
+                Recent Searches
+              </a>
+      
+              <div class="navbar-dropdown" id="recent-search">
+                
+              </div>
             </div>
-            <div class="column is-half">
-              <p class="movieDescription">Movie Description</p>
+          </div>
+      
+          <div class="navbar-end">
+            <div class="navbar-item">
             </div>
-
-
           </div>
         </div>
+      </nav>
+      <section class="hero">
+        <div class="box">
+            <div class="field column is-three-quarters">
+                <label class="label">Enter a Movie Title</label>
+                <input class="input is-link" type="text" placeholder="eg: The Secret Life of Walter Mitty"/>
+                <span>
+                  <button class="button is-medium is-link js-modal-trigger" data-target="modal-js-example">
+                      <strong>Search</strong>
+                    </button>
+              </span>
+            </div>
+        </div>
+    </section>
+      <section class="hero">
+        <div class="hero-body">
+          <div class="hero-content">
+              <figure>
+                  <img src="./assets/images/couple.jpg">
+              </figure>
+          </div>
+      </div>
+      </section>
+    <!-- modal for search results -->
+    <div class="modal">
+      <div class="modal-background"></div>
+      <div id="infoContainer" class="modal-card">
+        <header class="modal-card-head">
+          <h2 id="movieTitle" class="modal-card-title has-text-weight-semibold"></h2>
+          <button class="delete button has-text-primary-light is-success has-background-link" aria-label="close"></button>
+        </header>
+        <section id="" class="modal-card-body">
+          <div class="columns">
+            <div class="column">
+              <figure class="image image is-4by5">
+                <img id="movieImg" src="">
+              </figure>
+            </div>
+            <div class="column">
+              <p class="has-text-weight-medium"> <span id="movieYear"></span> · <span id="movieRated"></span> · <span id="movieRuntime"></span>
+              </p>
+              <p id="moviePlot" class="mt-3"></p>
+              <div id="watchOptions" class="mt-3">
+                <h2 class="has-text-weight-medium">Streaming Options</h2>
+                <p id="streamingMessage"></p>
+                <ul id="linkList">
+                </ul>
+              </div>
+            </div>
+        </section>
+        <footer class="modal-card-foot">
+        </footer>
       </div>
     </div>
-  </section>
-  <footer class="footer">
-    <div class="content has-text-centered">
-      <p>This is the footer</p>
-    </div>
-  </footer>
-  <script src="./assets/js/script.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="./assets/js/modal-script.js"></script>
+    <script src="./assets/js/script.js"></script>
 </body>
 
+    <footer class="footer">
+        <div class="content has-text-centered">
+        <p>
+            <strong>Find-A-Flick</strong> by Group 7.
+            <br> 
+            The source code is licensed
+            <a href="http://opensource.org/licenses/mit-license.php">MIT</a>.
+        </p>
+        </div>
+    </footer>
 </html>

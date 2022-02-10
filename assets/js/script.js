@@ -1,8 +1,9 @@
 
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
+var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
 
-var getMovieInfo = function(movie, key) {
+var getMovieInfo = function (movie) {
 
     // OMDB var
     var apiUrl = "http://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
@@ -13,14 +14,26 @@ var getMovieInfo = function(movie, key) {
         return response.json();
     })
     .then(function(data) {
-        displayMovieInfo(data);
-        streamingAvailability(data, key);
+
+        // Check to see if the response comes back as true or false
+        if (data.Response === 'False') {
+            console.log(data)
+            alert("Please Enter a valid Movie Title!")
+        } else {
+            console.log(data)
+            displayMovieInfo(data);
+            streamingAvailability(data);
+        }
+    })
+    .catch(function(error) {
+        console.log(error)
+        alert("Unable to connect to server!")
     });
 };
 
-var streamingAvailability = function (movie, key) {
+var streamingAvailability = function (movie) {
 
-    
+
     // pull out imdbID for API fetch request
     var imdb_id = movie.imdbID;
     // pull title for error message
@@ -34,13 +47,15 @@ var streamingAvailability = function (movie, key) {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-            "x-rapidapi-key": key
+            "x-rapidapi-key": api
         }
     }).then(function (response) {
 
         if (response.ok) {
             return response.json();
         } else {
+
+            
             // create error message if 404 error / no object returned.
             var msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
@@ -54,110 +69,82 @@ var streamingAvailability = function (movie, key) {
             return;
         }
     }).then(function (data) {
+        console.log(data);
         // pass the data object if it was returned
         displayStreamingLinks(data);
     });
 
 };
 
-var displayMovieInfo = function(data) {
-    
+var displayMovieInfo = function (data) {
+
+    // document.getElementById("test").innerHTML = "";
+
     // Create a container to hold information from OMDB and display it
-    // Might be unnecessary IF it is hard coded in html 
-    var MOVIECONTAINER = document.createElement("div")
 
     // Create a title element
-    var filmTitle = document.createElement("h2")
+    var filmTitle = document.querySelector('#movieTitle')
     // set text to title value from omdb
     filmTitle.textContent = (data.Title)
-    // Append to the page
-    MOVIECONTAINER.appendChild(filmTitle)
 
     // Create an img element 
-    var poster = document.createElement("img")
+    var poster = document.querySelector('#movieImg')
     // set source of img as link for poster from omdb
+    console.log(data.Poster)
     poster.setAttribute("src", data.Poster)
-    // Append to the page
-    MOVIECONTAINER.appendChild(poster)
 
     // Create text for Year
-    var year = document.createElement('p')
+    var year = document.querySelector('#movieYear')
     // set text of the year to value form omdb
     year.textContent = ("Released: " + data.Year)
-    // Append to the page
-    MOVIECONTAINER.appendChild(year)
 
     // Create text for Rated
-    var rated = document.createElement('p')
+    var rated = document.querySelector('#movieRated')
     // set text to rated value from omdb
     rated.textContent = ("Rated: " + data.Rated)
-    // Append to the page
-    MOVIECONTAINER.appendChild(rated)
 
     // Create text for Runtime
-    var runtime = document.createElement("p")
+    var runtime = document.querySelector('#movieRuntime')
     // set text to runtime from omdb
     runtime.textContent = ("Runtime: " + data.Runtime)
-    // Append to the page
-    MOVIECONTAINER.appendChild(runtime)
+
 
     // Create text for Plot
-    var plot = document.createElement("p")
+    var plot = document.querySelector('#moviePlot')
     // set text for plot from omdb
     plot.textContent = (data.Plot)
-    // Append to the page
-    MOVIECONTAINER.appendChild(plot)
-
-    document.body.appendChild(MOVIECONTAINER)
 
 };
 
 var displayStreamingLinks = function (data) {
 
+    document.getElementById("linkList").innerHTML = "";
+    
     // title variable case sensitive and title is not captialized in the streaming-availability object
     var title = data.title;
     // empty string for success/failure msg
     var msg = "";
 
-    // container for the links
-    var linkContainer = document.createElement("div");
-
-    // populate the h2 header and append to container
-    var msgEl = document.createElement("h2")
-    msgEl.textContent = (msg);
-    linkContainer.appendChild(msgEl);
-
-    // create ul to house the list of links
-    var ulEl = document.createElement("ul");
-
     // Use object.keys to create an array of the names of the streaming options available 
     var options = Object.keys(data.streamingInfo);
 
+    console.log(options);
     if (options[0] == null) {
         // if options array is empty, then teh object was returned and no streaming services were found
         // so create a failure message and display it to the user
         msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
-        var linkContainer = document.createElement("div");
-
         // populate the h2 header and append to container
         var msgEl = document.createElement("h2")
         msgEl.textContent = (msg);
-        linkContainer.appendChild(msgEl);
+        
 
-        document.body.appendChild(linkContainer);
+        document.getElementById("linkList").appendChild(msgEl);
 
     } else {
         // if options array is not empty, then streaming services were returned
         // create success message
         msg = "Thank you for using find-a-flick! Your selection of " + title + " is available to stream at:"
-
-        var linkContainer = document.createElement("div");
-
-        // populate the h2 header and append to container
-        var msgEl = document.createElement("h2")
-        msgEl.textContent = (msg);
-        linkContainer.appendChild(msgEl);
 
         // then loop through the array of options to access the link for each
         // ex data.streamingInfo[key = netflix].us.link;
@@ -181,46 +168,70 @@ var displayStreamingLinks = function (data) {
             var linkEl = document.createElement("a");
 
             // set link to linkS href to go to the streaming service and correct name
+            console.log(link)
             linkEl.setAttribute("href", link);
             // set target to _blank so link opens a new tab
             linkEl.setAttribute("target", newTab);
             linkEl.textContent = (serviceName);
             optEl.appendChild(linkEl);
-            ulEl.appendChild(optEl);
+            console.log(optEl);
+
+            document.getElementById("linkList").appendChild(optEl);
         };
 
-        var serviceLinks = document.createElement("nav");
-        serviceLinks.appendChild(ulEl);
-
-        linkContainer.appendChild(serviceLinks);
-
-        document.body.appendChild(linkContainer);
     }
 };
 
-/*
 // add onload="test()" to html
-var test = function (){
-    var testStr = "Simpsons"
-    var key = "";
-    getMovieInfo(testStr, key);
+// var test = function () {
+//     var testStr = "Simpsons";
+//     var testStr2 = "Ghostbusters";
+//     var testStr3 = "Dark"
+//     getMovieInfo(testStr, api);
+
     // That 70s Show returns an object but no streaming
     // Simpsons returns multiple streaming options
     // Wallace and Gromit 404s and doesen't return an object
-};*/
+// };
 
+var saveSearch = function (title) {
+    // length + 1 so nothing is overwritten
+    key = localStorage.length + 1;
+    var value = title;
+    // save user entered title and key to local storage
+    localStorage.setItem(key, JSON.stringify(value));
 
-$("#btn").click(function(event) {
+    // create past search element to append to the nav dropdown
+    var pastSearch = document.createElement("a");
+    pastSearch.setAttribute("id", key);
+    pastSearch.setAttribute("class", "navbar-item nav-search");
+    pastSearch.textContent = (title);
+
+    // append the elment to nav dropdown
+    document.getElementById("recent-search").appendChild(pastSearch);
+};
+
+$(".navbar-item").click(function (event) {
+
+    const modal = document.querySelector(".modal")
+
     // Prevent page from reloading
     event.preventDefault();
+    console.log("triggered")
 
-    // Set sibling form text value to variable
-    var movieTitle = $(this).siblings(".form").text();
+    var key = event.target.id; 
+    console.log(key);
 
-    // Grab user entered API Key and pass along
-    var key = $("#api-key").text(); 
+    // pull key from local storage
+    var api = JSON.parse(localStorage.getItem(key));
 
-    // send variable "Movie title" into fetch request
-    getMovieInfo(movieTitle, key);
+    // pull title from local storage. 
+    var movieTitle = JSON.parse(localStorage.getItem(key));
+    console.log(movieTitle);
+
+    getMovieInfo(movieTitle)
+
+    modal.classList.add('is-active')
+
 });
 
