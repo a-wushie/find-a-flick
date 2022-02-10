@@ -17,6 +17,7 @@ var getMovieInfo = function (movie) {
 
         // Check to see if the response comes back as true or false
         if (data.Response === 'False') {
+            console.log(data)
             alert("Please Enter a valid Movie Title!")
         } else {
             console.log(data)
