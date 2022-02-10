@@ -100,22 +100,42 @@
     <!-- modal for search results -->
     <div class="modal is-active">
         <div class="modal-background"></div>
-        <div class="modal-card">
+        <div id="infoContainer" class="modal-card">
           <header class="modal-card-head">
-            < class="modal-card-title ">Movie Title</p>
+            <h2 id="movieTitle" class="modal-card-title has-text-weight-semibold">The Secret Life of Walter Mitty</h2>
             <button class="delete button has-text-primary-light is-success has-background-link" aria-label="close"></button>
           </header>
           <section id="" class="modal-card-body">
-            <!-- Content ... -->
+            <div class="columns">
+              <div class="column">
+                <figure class="image image is-4by5">
+                  <img id="movieImg" src="assets\images\the-secret-life-of-walter-mitty.jpg">
+                </figure>
+              </div>
+              <div class="column">
+                <p class="has-text-weight-medium"> <span id="movieYear">2013</span> · <span id="movieRuntime">PG</span> · <span id="movieRuntime">1h 54m</span>
+                </p>
+                <p id="moviePlot" class="mt-3">When both he and a colleague are about to lose their job, Walter takes action by embarking on an adventure more extraordinary than anything he could have ever imagined.</p>
+                <div id="watchOptions" class="mt-3">
+                  <h2 class="has-text-weight-medium">Streaming Options</h2>
+                  <p id="streamingMessage"></p>
+                  <ul id="linkList">
+                    <li>
+                      <a id="streamingLink" href="#">
+                        <p>Netflix</p>
+                       </a>      
+                     </li>
+                  </ul>
+                </div>
+              </div>
           </section>
           <footer class="modal-card-foot">
-            <button class="button has-text-primary-light is-success has-background-link">Save changes</button>
-            <button class="button ">Cancel</button>
           </footer>
         </div>
       </div>
   
   <script src="./assets/js/modal-script.js"></script>
+  <script src="./assets/js/script.js"></script>
 </body>
 
     <footer class="footer">
