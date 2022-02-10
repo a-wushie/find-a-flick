@@ -1,12 +1,4 @@
-/*Notes
-Elements are beign appended to a test div
-need to edit to append to the modal card
 
-Dynamically created elements need bulma css classes
-
-
-
-*/
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
 var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
@@ -24,7 +16,7 @@ var getMovieInfo = function (movie) {
         .then(function (data) {
             displayMovieInfo(data);
             console.log(data);
-            streamingAvailability(data, key);
+            streamingAvailability(data, api);
         });
 };
 
@@ -51,6 +43,8 @@ var streamingAvailability = function (movie) {
         if (response.ok) {
             return response.json();
         } else {
+
+            
             // create error message if 404 error / no object returned.
             var msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
@@ -64,6 +58,7 @@ var streamingAvailability = function (movie) {
             return;
         }
     }).then(function (data) {
+        console.log(data);
         // pass the data object if it was returned
         displayStreamingLinks(data);
     });
@@ -72,7 +67,7 @@ var streamingAvailability = function (movie) {
 
 var displayMovieInfo = function (data) {
 
-    document.getElementById("test").innerHTML = "";
+    // document.getElementById("test").innerHTML = "";
 
     // Create a container to hold information from OMDB and display it
     // Might be unnecessary IF it is hard coded in html 
@@ -120,47 +115,36 @@ var displayMovieInfo = function (data) {
     // Append to the page
     MOVIECONTAINER.appendChild(plot)
 
-    // document.getElementById("#test").innerHTML = "";
-    // put at the top of each html creation to clear the contents
-    
-    document.getElementById("test").appendChild(MOVIECONTAINER);
-
 };
 
 var displayStreamingLinks = function (data) {
+
+    console.log(data);
     
     // title variable case sensitive and title is not captialized in the streaming-availability object
     var title = data.title;
     // empty string for success/failure msg
     var msg = "";
 
-    // container for the links
-    var linkContainer = document.createElement("div");
-
-    // populate the h2 header and append to container
-    var msgEl = document.createElement("h2")
-    msgEl.textContent = (msg);
-    linkContainer.appendChild(msgEl);
-
-    // create ul to house the list of links
-    var ulEl = document.createElement("ul");
+    console.log(Object.keys(data.streamingInfo));
 
     // Use object.keys to create an array of the names of the streaming options available 
     var options = Object.keys(data.streamingInfo);
 
+    console.log(options);
     if (options[0] == null) {
         // if options array is empty, then teh object was returned and no streaming services were found
         // so create a failure message and display it to the user
         msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
-        var linkContainer = document.createElement("div");
+    
 
         // populate the h2 header and append to container
         var msgEl = document.createElement("h2")
         msgEl.textContent = (msg);
-        linkContainer.appendChild(msgEl);
+        
 
-        document.getElementById("test").appendChild(linkContainer);
+        document.getElementById("linkList").appendChild(msgEl);
 
     } else {
         // if options array is not empty, then streaming services were returned
@@ -201,33 +185,21 @@ var displayStreamingLinks = function (data) {
             linkEl.setAttribute("target", newTab);
             linkEl.textContent = (serviceName);
             optEl.appendChild(linkEl);
-            ulEl.appendChild(optEl);
+            console.log(optEl);
+
+            document.getElementById("linkList").appendChild(optEl);
         };
 
-        var serviceLinks = document.createElement("nav");
-        serviceLinks.appendChild(ulEl);
-
-        linkContainer.appendChild(serviceLinks);
-
-        document.getElementById("test").appendChild(linkContainer);
     }
 };
-
 
 // add onload="test()" to html
 var test = function () {
     var testStr = "Simpsons";
     var testStr2 = "Ghostbusters";
     var testStr3 = "Dark"
-    console.log(1);
-    // getMovieInfo(testStr, api);
-    console.log(2);
-    saveSearch(testStr);
+    getMovieInfo(testStr, api);
 
-    getMovieInfo(testStr2, api);
-    saveSearch(testStr2);
-
-    saveSearch(testStr3);
     // That 70s Show returns an object but no streaming
     // Simpsons returns multiple streaming options
     // Wallace and Gromit 404s and doesen't return an object
