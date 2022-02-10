@@ -18,11 +18,13 @@ var getMovieInfo = function(movie, key) {
         if (data.Response === 'False') {
             alert("Please Enter a valid Movie Title!")
         } else {
+            console.log(data)
             displayMovieInfo(data);
             streamingAvailability(data, key);
         }
     })
     .catch(function(error) {
+        console.log(error)
         alert("Unable to connect to server!")
     });
 };
@@ -72,52 +74,38 @@ var streamingAvailability = function (movie, key) {
 var displayMovieInfo = function(data) {
     
     // Create a container to hold information from OMDB and display it
-    // Might be unnecessary IF it is hard coded in html 
-    var MOVIECONTAINER = document.createElement('infoContainer')
 
     // Create a title element
-    var filmTitle = document.createElement('movieTitle')
+    var filmTitle = document.querySelector('#movieTitle')
     // set text to title value from omdb
     filmTitle.textContent = (data.Title)
-    // Append to the page
-    MOVIECONTAINER.appendChild(filmTitle)
 
     // Create an img element 
-    var poster = document.createElement('movieImg')
+    var poster = document.querySelector('#movieImg')
     // set source of img as link for poster from omdb
+    console.log(data.Poster)
     poster.setAttribute("src", data.Poster)
-    // Append to the page
-    MOVIECONTAINER.appendChild(poster)
 
     // Create text for Year
-    var year = document.createElement('movieYear')
+    var year = document.querySelector('#movieYear')
     // set text of the year to value form omdb
     year.textContent = ("Released: " + data.Year)
-    // Append to the page
-    MOVIECONTAINER.appendChild(year)
 
     // Create text for Rated
-    var rated = document.createElement('movieRated')
+    var rated = document.querySelector('#movieRated')
     // set text to rated value from omdb
     rated.textContent = ("Rated: " + data.Rated)
-    // Append to the page
-    MOVIECONTAINER.appendChild(rated)
 
     // Create text for Runtime
-    var runtime = document.createElement('movieRuntime')
+    var runtime = document.querySelector('#movieRuntime')
     // set text to runtime from omdb
     runtime.textContent = ("Runtime: " + data.Runtime)
-    // Append to the page
-    MOVIECONTAINER.appendChild(runtime)
+
 
     // Create text for Plot
-    var plot = document.createElement('moviePlot')
+    var plot = document.querySelector('#moviePlot')
     // set text for plot from omdb
     plot.textContent = (data.Plot)
-    // Append to the page
-    MOVIECONTAINER.appendChild(plot)
-
-    document.body.appendChild(MOVIECONTAINER)
 
 };
 
