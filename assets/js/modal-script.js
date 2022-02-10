@@ -22,11 +22,14 @@ document.addEventListener('DOMContentLoaded', () => {
     searchBtn.addEventListener('click', (e) => {
       e.preventDefault();
 
-      var searchItem = searchResult.value
-      console.log(searchResult.value)
+      var searchItem = searchResult.value.trim()
+      console.log(searchItem)
       
       getMovieInfo(searchItem)
+
       modal.classList.add('is-active')
+
+      saveSearch(searchItem)
     });
 
   
