@@ -21,7 +21,7 @@ var getMovieInfo = function (movie) {
         } else {
             console.log(data)
             displayMovieInfo(data);
-            streamingAvailability(data, key);
+            streamingAvailability(data);
         }
     })
     .catch(function(error) {
@@ -145,13 +145,6 @@ var displayStreamingLinks = function (data) {
         // create success message
         msg = "Thank you for using find-a-flick! Your selection of " + title + " is available to stream at:"
 
-        var linkContainer = document.createElement('watchOptions');
-
-        // populate the h2 header and append to container
-        var msgEl = document.createElement("h2")
-        msgEl.textContent = (msg);
-        linkContainer.appendChild(msgEl);
-
         // then loop through the array of options to access the link for each
         // ex data.streamingInfo[key = netflix].us.link;
         // with each iteration also save the text name of the option.
@@ -171,9 +164,10 @@ var displayStreamingLinks = function (data) {
 
             // create list item and link el
             var optEl = document.createElement("li");
-            var linkEl = document.createElement('streamingLink');
+            var linkEl = document.createElement("a");
 
             // set link to linkS href to go to the streaming service and correct name
+            console.log(link)
             linkEl.setAttribute("href", link);
             // set target to _blank so link opens a new tab
             linkEl.setAttribute("target", newTab);
@@ -188,16 +182,16 @@ var displayStreamingLinks = function (data) {
 };
 
 // add onload="test()" to html
-var test = function () {
-    var testStr = "Simpsons";
-    var testStr2 = "Ghostbusters";
-    var testStr3 = "Dark"
-    getMovieInfo(testStr, api);
+// var test = function () {
+//     var testStr = "Simpsons";
+//     var testStr2 = "Ghostbusters";
+//     var testStr3 = "Dark"
+//     getMovieInfo(testStr, api);
 
     // That 70s Show returns an object but no streaming
     // Simpsons returns multiple streaming options
     // Wallace and Gromit 404s and doesen't return an object
-};
+// };
 
 var saveSearch = function (title) {
     // length + 1 so nothing is overwritten
