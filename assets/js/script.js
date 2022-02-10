@@ -1,6 +1,6 @@
 
 // variables 
-var searchButtonEl = document.getElementsByClassName("btn");
+var searchButtonEl = document.getElementsByClassName("btn")
 
 var getMovieInfo = function(movie, key) {
 
@@ -13,9 +13,17 @@ var getMovieInfo = function(movie, key) {
         return response.json();
     })
     .then(function(data) {
-        displayMovieInfo(data);
-        console.log(data);
-        streamingAvailability(data, key);
+
+        // Check to see if the response comes back as true or false
+        if (data.Response === 'False') {
+            alert("Please Enter a valid Movie Title!")
+        } else {
+            displayMovieInfo(data);
+            streamingAvailability(data, key);
+        }
+    })
+    .catch(function(error) {
+        alert("Unable to connect to server!")
     });
 };
 
@@ -245,7 +253,6 @@ $("#btn").click(function(event) {
     getMovieInfo(movieTitle, key);
 });
 
-
 $(".navbar-item").click(function(event) {
     // Prevent page from reloading
     event.preventDefault();
@@ -264,3 +271,4 @@ $(".navbar-item").click(function(event) {
     getMovieInfo(movieTitle, api)
 
 });
+
