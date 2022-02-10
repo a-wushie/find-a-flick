@@ -17,6 +17,7 @@ var getMovieInfo = function (movie) {
 
         // Check to see if the response comes back as true or false
         if (data.Response === 'False') {
+            console.log(data)
             alert("Please Enter a valid Movie Title!")
         } else {
             console.log(data)
@@ -117,7 +118,7 @@ var displayMovieInfo = function (data) {
 
 var displayStreamingLinks = function (data) {
 
-    console.log(data);
+    document.getElementById("linkList").innerHTML = "";
     
     // title variable case sensitive and title is not captialized in the streaming-availability object
     var title = data.title;
@@ -210,22 +211,9 @@ var saveSearch = function (title) {
     document.getElementById("recent-search").appendChild(pastSearch);
 };
 
-
-$("#btn").click(function (event) {
-    // Prevent page from reloading
-    event.preventDefault();
-
-    // Set sibling form text value to variable
-    var movieTitle = $(this).siblings(".form").text();
-
-    // Grab user entered API Key and pass along
-    var key = $("#api-key").text();
-
-    // send variable "Movie title" into fetch request
-    getMovieInfo(movieTitle, key);
-});
-
 $(".navbar-item").click(function (event) {
+
+    const modal = document.querySelector(".modal")
 
     // Prevent page from reloading
     event.preventDefault();
@@ -241,7 +229,9 @@ $(".navbar-item").click(function (event) {
     var movieTitle = JSON.parse(localStorage.getItem(key));
     console.log(movieTitle);
 
-    getMovieInfo(movieTitle, api)
+    getMovieInfo(movieTitle)
+
+    modal.classList.add('is-active')
 
 });
 

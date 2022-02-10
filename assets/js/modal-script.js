@@ -15,15 +15,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   
     // Add a click event on buttons to open a specific modal
-    (document.querySelectorAll('.js-modal-trigger') || []).forEach(($trigger) => {
-      const modal = $trigger.dataset.target;
-      const $target = document.getElementById(modal);
-      console.log($target);
-  
-      $trigger.addEventListener('click', () => {
-        openModal($target);
-      });
+    const modal = document.querySelector(".modal")
+    const searchBtn = document.querySelector(".js-modal-trigger")
+    const searchResult = document.querySelector('.input')
+
+    searchBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+
+      var searchItem = searchResult.value.trim()
+      console.log(searchItem)
+      
+      getMovieInfo(searchItem)
+
+      modal.classList.add('is-active')
+
+      saveSearch(searchItem)
     });
+
   
     // Add a click event on various child elements to close the parent modal
     (document.querySelectorAll('.modal-background, .modal-close, .modal-card-head .delete, .modal-card-foot .button') || []).forEach(($close) => {
