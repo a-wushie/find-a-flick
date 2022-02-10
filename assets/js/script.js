@@ -1,8 +1,9 @@
 
 // variables 
-var searchButtonEl = document.getElementsByClassName("btn")
+var searchButtonEl = document.getElementsByClassName("btn");
+var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
 
-var getMovieInfo = function(movie, key) {
+var getMovieInfo = function (movie) {
 
     // OMDB var
     var apiUrl = "http://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
@@ -29,9 +30,9 @@ var getMovieInfo = function(movie, key) {
     });
 };
 
-var streamingAvailability = function (movie, key) {
+var streamingAvailability = function (movie) {
 
-    
+
     // pull out imdbID for API fetch request
     var imdb_id = movie.imdbID;
     // pull title for error message
@@ -45,13 +46,15 @@ var streamingAvailability = function (movie, key) {
         "method": "GET",
         "headers": {
             "x-rapidapi-host": "streaming-availability.p.rapidapi.com",
-            "x-rapidapi-key": key
+            "x-rapidapi-key": api
         }
     }).then(function (response) {
 
         if (response.ok) {
             return response.json();
         } else {
+
+            
             // create error message if 404 error / no object returned.
             var msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
@@ -65,14 +68,17 @@ var streamingAvailability = function (movie, key) {
             return;
         }
     }).then(function (data) {
+        console.log(data);
         // pass the data object if it was returned
         displayStreamingLinks(data);
     });
 
 };
 
-var displayMovieInfo = function(data) {
-    
+var displayMovieInfo = function (data) {
+
+    // document.getElementById("test").innerHTML = "";
+
     // Create a container to hold information from OMDB and display it
 
     // Create a title element
@@ -111,39 +117,28 @@ var displayMovieInfo = function(data) {
 
 var displayStreamingLinks = function (data) {
 
+    console.log(data);
+    
     // title variable case sensitive and title is not captialized in the streaming-availability object
     var title = data.title;
     // empty string for success/failure msg
     var msg = "";
 
-    // container for the links
-    var linkContainer = document.createElement('watchOptions');
-
-    // populate the h2 header and append to container
-    var msgEl = document.createElement("div")
-    msgEl.classList=("streamingMessage")
-    msgEl.textContent = (msg);
-    linkContainer.appendChild(msgEl);
-
-    // create ul to house the list of links
-    var ulEl = document.createElement('linkList');
-
     // Use object.keys to create an array of the names of the streaming options available 
     var options = Object.keys(data.streamingInfo);
 
+    console.log(options);
     if (options[0] == null) {
         // if options array is empty, then teh object was returned and no streaming services were found
         // so create a failure message and display it to the user
         msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
-        var linkContainer = document.createElement('watchOptions');
-
         // populate the h2 header and append to container
         var msgEl = document.createElement("h2")
         msgEl.textContent = (msg);
-        linkContainer.appendChild(msgEl);
+        
 
-        document.body.appendChild(linkContainer);
+        document.getElementById("linkList").appendChild(msgEl);
 
     } else {
         // if options array is not empty, then streaming services were returned
@@ -184,27 +179,21 @@ var displayStreamingLinks = function (data) {
             linkEl.setAttribute("target", newTab);
             linkEl.textContent = (serviceName);
             optEl.appendChild(linkEl);
-            ulEl.appendChild(optEl);
+            console.log(optEl);
+
+            document.getElementById("linkList").appendChild(optEl);
         };
 
-        var serviceLinks = document.createElement("nav");
-        serviceLinks.appendChild(ulEl);
-
-        linkContainer.appendChild(serviceLinks);
-
-        document.body.appendChild(linkContainer);
     }
 };
 
-
 // add onload="test()" to html
-var test = function (){
+var test = function () {
     var testStr = "Simpsons";
-    var key = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
-    console.log(1);
-    getMovieInfo(testStr, key);
-    console.log(2);
-    saveSearch(testStr);
+    var testStr2 = "Ghostbusters";
+    var testStr3 = "Dark"
+    getMovieInfo(testStr, api);
+
     // That 70s Show returns an object but no streaming
     // Simpsons returns multiple streaming options
     // Wallace and Gromit 404s and doesen't return an object
@@ -220,7 +209,7 @@ var saveSearch = function (title) {
     // create past search element to append to the nav dropdown
     var pastSearch = document.createElement("a");
     pastSearch.setAttribute("id", key);
-    pastSearch.setAttribute("class", "navbar-item");
+    pastSearch.setAttribute("class", "navbar-item nav-search");
     pastSearch.textContent = (title);
 
     // append the elment to nav dropdown
@@ -228,7 +217,7 @@ var saveSearch = function (title) {
 };
 
 
-$("#btn").click(function(event) {
+$("#btn").click(function (event) {
     // Prevent page from reloading
     event.preventDefault();
 
@@ -236,18 +225,19 @@ $("#btn").click(function(event) {
     var movieTitle = $(this).siblings(".form").text();
 
     // Grab user entered API Key and pass along
-    var key = $("#api-key").text(); 
+    var key = $("#api-key").text();
 
     // send variable "Movie title" into fetch request
     getMovieInfo(movieTitle, key);
 });
 
-$(".navbar-item").click(function(event) {
+$(".navbar-item").click(function (event) {
+
     // Prevent page from reloading
     event.preventDefault();
     console.log("triggered")
 
-    var key = $(this).attr("id");
+    var key = event.target.id; 
     console.log(key);
 
     // pull key from local storage
@@ -256,7 +246,7 @@ $(".navbar-item").click(function(event) {
     // pull title from local storage. 
     var movieTitle = JSON.parse(localStorage.getItem(key));
     console.log(movieTitle);
-    
+
     getMovieInfo(movieTitle, api)
 
 });
