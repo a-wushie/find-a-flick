@@ -27,13 +27,11 @@ var getMovieInfo = function (movie) {
         // Check to see if the response comes back as true or false
         if (data.Response === 'False') {
 
-            errorMessage.textContent = ("Please enter a valid title.")
+            errorMessage.textContent = ("That title was not found. Please enter a valid title.")
             console.log(data)
             modalError.classList.add('is-active');
-            
-            // alert("Please Enter a valid Movie Title!")
+
         } else {
-            // saveSearch(data.Title); // Moved save search here so its only called if the user enters a valid input
             displayMovieInfo(data);
             streamingAvailability(data);
             modal.classList.add('is-active') // moved is active call here so modal is only displayed if omdb returns a movie object
@@ -68,7 +66,6 @@ var streamingAvailability = function (movie) {
         if (response.ok) {
             return response.json();
         } else {
-
             // create error message if 404 error / no object returned.
             var msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
@@ -77,7 +74,6 @@ var streamingAvailability = function (movie) {
 
         }
     }).then(function (data) {
-        console.log(data);
         // pass the data object if it was returned
         displayStreamingLinks(data);
     });
@@ -98,7 +94,6 @@ var displayMovieInfo = function (data) {
     // Create an img element 
     var poster = document.querySelector('#movieImg')
     // set source of img as link for poster from omdb
-    console.log(data.Poster)
     poster.setAttribute("src", data.Poster)
 
     // Create text for Year
@@ -136,7 +131,6 @@ var displayStreamingLinks = function (data) {
     // Use object.keys to create an array of the names of the streaming options available 
     var options = Object.keys(data.streamingInfo);
 
-    console.log(options);
     if (options[0] == null) {
         // if options array is empty, then the object was returned and no streaming services were found
         // so create a failure message and display it to the user
