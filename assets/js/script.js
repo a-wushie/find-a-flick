@@ -7,7 +7,7 @@ const modal = document.querySelector(".modal");
 var getMovieInfo = function (movie) {
 
     // OMDB var
-    var apiUrl = "http://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
+    var apiUrl = "https://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
 
     // get data through a fetch request
     fetch(apiUrl)
