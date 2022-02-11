@@ -23,11 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
 
       var searchItem = searchResult.value.trim()
+      console.log(searchItem)
       
       getMovieInfo(searchItem)
 
-      saveSearch(searchItem);
-
+      saveSearch(searchItem)
     });
 
   
