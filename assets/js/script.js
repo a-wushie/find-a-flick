@@ -1,7 +1,16 @@
+/*
+Add error check to the getMovieInfo that pops up another modal with and error message.
 
+Add section to Read Me going over how to get an API key,
+didn't want to store it in teh cleasr. etc.  
+
+*/
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
 var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
+const modal = document.querySelector("#modal-info")
+var modalError = document.querySelector("#modal-error");
+var errorMessage = document.querySelector("#error-msg")
 
 var getMovieInfo = function (movie) {
 
@@ -17,17 +26,22 @@ var getMovieInfo = function (movie) {
 
         // Check to see if the response comes back as true or false
         if (data.Response === 'False') {
+
+            errorMessage.textContent = ("Please enter a valid title.")
             console.log(data)
-            alert("Please Enter a valid Movie Title!")
+            modalError.classList.add('is-active');
+            
+            // alert("Please Enter a valid Movie Title!")
         } else {
-            console.log(data)
+            // saveSearch(data.Title); // Moved save search here so its only called if the user enters a valid input
             displayMovieInfo(data);
             streamingAvailability(data);
+            modal.classList.add('is-active') // moved is active call here so modal is only displayed if omdb returns a movie object
         }
     })
     .catch(function(error) {
         console.log(error)
-        alert("Unable to connect to server!")
+        //alert("Unable to connect to server!")
     });
 };
 
@@ -55,18 +69,12 @@ var streamingAvailability = function (movie) {
             return response.json();
         } else {
 
-            
             // create error message if 404 error / no object returned.
             var msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
-            var noStreamEl = document.createElement("div");
             var msgEl = document.createElement("h2");
             msgEl.textContent = (msg);
 
-            noStreamEl.appendChild(msgEl);
-
-            document.body.appendChild(noStreamEl)
-            return;
         }
     }).then(function (data) {
         console.log(data);
@@ -130,7 +138,7 @@ var displayStreamingLinks = function (data) {
 
     console.log(options);
     if (options[0] == null) {
-        // if options array is empty, then teh object was returned and no streaming services were found
+        // if options array is empty, then the object was returned and no streaming services were found
         // so create a failure message and display it to the user
         msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
@@ -142,17 +150,13 @@ var displayStreamingLinks = function (data) {
         document.getElementById("linkList").appendChild(msgEl);
 
     } else {
-        // if options array is not empty, then streaming services were returned
-        // create success message
-        msg = "Thank you for using find-a-flick! Your selection of " + title + " is available to stream at:"
 
-        // then loop through the array of options to access the link for each
+        // loop through the array of options to access the link for each
         // ex data.streamingInfo[key = netflix].us.link;
         // with each iteration also save the text name of the option.
         for (var i = 0; i < options.length; i++) {
             var key = options[i];
             var link = data.streamingInfo[key].us.link;
-
             var newTab = "_blank";
 
             // save the streaming option as a string
@@ -212,8 +216,6 @@ var saveSearch = function (title) {
 };
 
 $(".navbar-item").click(function (event) {
-
-    const modal = document.querySelector(".modal")
 
     // Prevent page from reloading
     event.preventDefault();
