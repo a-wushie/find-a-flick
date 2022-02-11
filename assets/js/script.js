@@ -2,6 +2,7 @@
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
 var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
+const modal = document.querySelector(".modal");
 
 var getMovieInfo = function (movie) {
 
@@ -18,16 +19,18 @@ var getMovieInfo = function (movie) {
         // Check to see if the response comes back as true or false
         if (data.Response === 'False') {
             console.log(data)
-            alert("Please Enter a valid Movie Title!")
+            // alert("Please Enter a valid Movie Title!")
+            return
         } else {
             console.log(data)
             displayMovieInfo(data);
             streamingAvailability(data);
+            modal.classList.add('is-active')
         }
     })
     .catch(function(error) {
         console.log(error)
-        alert("Unable to connect to server!")
+        // alert("Unable to connect to server!")
     });
 };
 

@@ -27,8 +27,6 @@ document.addEventListener('DOMContentLoaded', () => {
       
       getMovieInfo(searchItem)
 
-      modal.classList.add('is-active')
-
       saveSearch(searchItem)
     });
 
