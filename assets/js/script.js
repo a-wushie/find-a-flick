@@ -8,14 +8,16 @@ didn't want to store it in teh cleasr. etc.
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
 var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
+
 const modal = document.querySelector("#modal-info")
 var modalError = document.querySelector("#modal-error");
 var errorMessage = document.querySelector("#error-msg")
 
+
 var getMovieInfo = function (movie) {
 
     // OMDB var
-    var apiUrl = "http://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
+    var apiUrl = "https://www.omdbapi.com/?apikey=4ba5eec&t=" + movie;
 
     // get data through a fetch request
     fetch(apiUrl)
@@ -29,17 +31,19 @@ var getMovieInfo = function (movie) {
 
             errorMessage.textContent = ("That title was not found. Please enter a valid title.")
             console.log(data)
+
             modalError.classList.add('is-active');
+
 
         } else {
             displayMovieInfo(data);
             streamingAvailability(data);
-            modal.classList.add('is-active') // moved is active call here so modal is only displayed if omdb returns a movie object
+
+            modal.classList.add('is-active')
         }
     })
     .catch(function(error) {
         console.log(error)
-        //alert("Unable to connect to server!")
     });
 };
 
