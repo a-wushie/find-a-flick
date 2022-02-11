@@ -23,13 +23,11 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
 
       var searchItem = searchResult.value.trim()
-      console.log(searchItem)
       
       getMovieInfo(searchItem)
 
-      modal.classList.add('is-active')
+      saveSearch(searchItem);
 
-      saveSearch(searchItem)
     });
 
   
