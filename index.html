@@ -10,11 +10,30 @@
     <title>Find-A-Flick</title>
 </head>
 
-<body>
+<body onload="setState()">
 
-    <!-- navigation bar -->
-    <nav class="navbar is-link" role="navigation" aria-label="main navigation">
-        <div class="navbar-brand">
+
+
+
+  <!-- navigation bar -->
+  <nav class="navbar is-link" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+
+      <a class="navbar-item" href="index.html">
+        <i class="fas fa-film"></i>Find-a-Flick
+      </a>
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+
+    </div>
+
+    <div id="" class="navbar-menu">
+      <div class="navbar-start">
+
 
           <a class="navbar-item" href="index.html">
             <i class="fas fa-film"></i>Find-a-Flick 
@@ -27,24 +46,48 @@
           </a>
 
         </div>
-      
-        <div id="" class="navbar-menu">
-          <div class="navbar-start">
-      
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link">
-                Recent Searches
-              </a>
-      
-              <div class="navbar-dropdown" id="recent-search">
-                
-              </div>
-            </div>
-          </div>
-      
-          <div class="navbar-end">
-            <div class="navbar-item">
-            </div>
+
+      </div>
+    </div>
+  </nav>
+  <section class="hero">
+    <div class="box">
+      <div class="field column is-three-quarters">
+        <label class="label">Enter a Movie Title</label>
+        <input class="input is-link" type="text" id="title-input" placeholder="eg: The Secret Life of Walter Mitty" />
+        <!-- <input class="input is-link" type="text" id="api-input" placeholder="API Key" /> -->
+        <span>
+          <button class="button is-medium is-link js-modal-trigger" data-target="modal-js-example">
+            <strong>Search</strong>
+          </button>
+        </span>
+      </div>
+    </div>
+  </section>
+  <section class="hero">
+    <div class="hero-body">
+      <div class="hero-content">
+        <figure>
+          <img src="./assets/images/couple.jpg">
+        </figure>
+      </div>
+    </div>
+  </section>
+  <!-- modal for search results -->
+  <div class="modal" id="modal-info">
+    <div class="modal-background"></div>
+    <div id="infoContainer" class="modal-card">
+      <header class="modal-card-head">
+        <h2 id="movieTitle" class="modal-card-title has-text-weight-semibold"></h2>
+        <button class="delete button has-text-primary-light is-success has-background-link" aria-label="close"></button>
+      </header>
+      <section id="" class="modal-card-body">
+        <div class="columns">
+          <div class="column">
+            <figure class="image image is-4by5">
+              <img id="movieImg" src="">
+            </figure>
+
           </div>
         </div>
       </nav>

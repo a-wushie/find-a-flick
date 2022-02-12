@@ -1,8 +1,33 @@
 
+// To Switch to user entered API Key: 
+// comment out line 6 and 21, 27 ,28 and 34 in modal-script.js
+// uncomment out line 64 and line 59 in index.html
+
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
 var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
-const modal = document.querySelector(".modal");
+
+const modal = document.querySelector("#modal-info");
+var modalError = document.querySelector("#modal-error");
+var errorMessage = document.querySelector("#error-msg");
+
+// counter for number for saved searches
+var numSavedSearches = 0;
+
+var checkDups = function (title) {
+    // define an object of titles 
+    for (var i = 0; i < localStorage.length; i++) {
+        // pull each item from local storage and compare to user entered value
+        var cmp = JSON.parse(localStorage.getItem(i));
+
+        // if match is found return TRUE.  User entered string is NOT a unqiue value
+        if (cmp === title) {
+            return true;
+        };
+    };
+};
+
+
 
 var getMovieInfo = function (movie) {
 
@@ -11,30 +36,34 @@ var getMovieInfo = function (movie) {
 
     // get data through a fetch request
     fetch(apiUrl)
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(data) {
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            // Check to see if the response comes back as true or false
+            if (data.Response === 'False') {
+                errorMessage.textContent = ("That title was not found. Please enter a valid title.")
+                modalError.classList.add('is-active');
+            } else {
+                if (!checkDups(data.Title)) {
+                    // if user entered value is unique save the search
+                    saveSearch(data.Title);
+                };
 
-        // Check to see if the response comes back as true or false
-        if (data.Response === 'False') {
-            console.log(data)
-            // alert("Please Enter a valid Movie Title!")
-            return
-        } else {
-            console.log(data)
-            displayMovieInfo(data);
-            streamingAvailability(data);
-            modal.classList.add('is-active')
-        }
-    })
-    .catch(function(error) {
-        console.log(error)
-        // alert("Unable to connect to server!")
-    });
+                displayMovieInfo(data);
+                streamingAvailability(data);
+                modal.classList.add('is-active')
+            }
+        })
+        .catch(function (error) {
+            console.log(error)
+        });
+
 };
 
 var streamingAvailability = function (movie) {
+
+    // var api = JSON.parse(localStorage.getItem("key"));
 
 
     // pull out imdbID for API fetch request
@@ -80,11 +109,6 @@ var streamingAvailability = function (movie) {
 };
 
 var displayMovieInfo = function (data) {
-
-    // document.getElementById("test").innerHTML = "";
-
-    // Create a container to hold information from OMDB and display it
-
     // Create a title element
     var filmTitle = document.querySelector('#movieTitle')
     // set text to title value from omdb
@@ -122,7 +146,7 @@ var displayMovieInfo = function (data) {
 var displayStreamingLinks = function (data) {
 
     document.getElementById("linkList").innerHTML = "";
-    
+
     // title variable case sensitive and title is not captialized in the streaming-availability object
     var title = data.title;
     // empty string for success/failure msg
@@ -140,7 +164,7 @@ var displayStreamingLinks = function (data) {
         // populate the h2 header and append to container
         var msgEl = document.createElement("h2")
         msgEl.textContent = (msg);
-        
+
 
         document.getElementById("linkList").appendChild(msgEl);
 
@@ -171,13 +195,11 @@ var displayStreamingLinks = function (data) {
             var linkEl = document.createElement("a");
 
             // set link to linkS href to go to the streaming service and correct name
-            console.log(link)
             linkEl.setAttribute("href", link);
             // set target to _blank so link opens a new tab
             linkEl.setAttribute("target", newTab);
             linkEl.textContent = (serviceName);
             optEl.appendChild(linkEl);
-            console.log(optEl);
 
             document.getElementById("linkList").appendChild(optEl);
         };
@@ -185,33 +207,70 @@ var displayStreamingLinks = function (data) {
     }
 };
 
-// add onload="test()" to html
-// var test = function () {
-//     var testStr = "Simpsons";
-//     var testStr2 = "Ghostbusters";
-//     var testStr3 = "Dark"
-//     getMovieInfo(testStr, api);
-
-    // That 70s Show returns an object but no streaming
-    // Simpsons returns multiple streaming options
-    // Wallace and Gromit 404s and doesen't return an object
-// };
-
 var saveSearch = function (title) {
-    // length + 1 so nothing is overwritten
-    key = localStorage.length + 1;
+    console.log(numSavedSearches);
+    // only want to save the last five searches
+    if (numSavedSearches === 5) {
+        numSavedSearches = 0;
+    }
+
+    key = numSavedSearches;
+    numSavedSearches++;
     var value = title;
     // save user entered title and key to local storage
     localStorage.setItem(key, JSON.stringify(value));
+    displaySavedSearches();
 
-    // create past search element to append to the nav dropdown
-    var pastSearch = document.createElement("a");
-    pastSearch.setAttribute("id", key);
-    pastSearch.setAttribute("class", "navbar-item nav-search");
-    pastSearch.textContent = (title);
+};
 
-    // append the elment to nav dropdown
-    document.getElementById("recent-search").appendChild(pastSearch);
+var displaySavedSearches = function () {
+    var pastSearches = [];
+    var keys = [];
+
+    document.getElementById("recent-search").innerHTML = "";
+
+    for (var i = 0; i < localStorage.length; i++) {
+
+        // pull key value of local storage object
+        var key = parseInt(localStorage.key(i));
+        // key values in range 1 to 5
+        if (key >= 0 && key < 5) {
+            keys[i] = key;
+            var searchText = JSON.parse(localStorage.getItem(key));
+            pastSearches[i] = searchText;
+        };
+    };
+
+    for (var i = 0; i < pastSearches.length; i++) {
+        var pastSearch = document.createElement("a");
+        pastSearch.setAttribute("id", keys[i]);
+        pastSearch.setAttribute("class", "navbar-item nav-search");
+        pastSearch.textContent = (pastSearches[i]);
+        // append the elment to nav dropdown
+        document.getElementById("recent-search").prepend(pastSearch);
+    }
+};
+
+var setState = function () {
+
+    var pastSearches = [];
+    var keys = [];
+
+    for (var i = 0; i < localStorage.length; i++) {
+
+        // pull key value of local storage object
+        var key = parseInt(localStorage.key(i));
+        // key values in range 1 to 5
+        if (key >= 0 && key < 5) {
+            keys[i] = key;
+            var searchText = JSON.parse(localStorage.getItem(key));
+            pastSearches[i] = searchText;
+        };
+
+    };
+    numSavedSearches = pastSearches.length;
+    displaySavedSearches();
+
 };
 
 $(".navbar-item").click(function (event) {
@@ -220,17 +279,15 @@ $(".navbar-item").click(function (event) {
 
     // Prevent page from reloading
     event.preventDefault();
-    console.log("triggered")
 
-    var key = event.target.id; 
-    console.log(key);
+    // grab id of event target to pull linked movie title
+    var key = event.target.id;
 
-    // pull key from local storage
-    var api = JSON.parse(localStorage.getItem(key));
+    // pull user entered key from local storage
+    // var api = JSON.parse(localStorage.getItem(key));
 
     // pull title from local storage. 
     var movieTitle = JSON.parse(localStorage.getItem(key));
-    console.log(movieTitle);
 
     getMovieInfo(movieTitle)
 
