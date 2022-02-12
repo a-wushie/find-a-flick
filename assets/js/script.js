@@ -1,3 +1,7 @@
+// To Switch to user entered API Key: 
+// comment out line 6 and 21, 27 ,28 and 34 in modal-script.js
+// uncomment out line 64 and line 59 in index.html
+
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
 var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
@@ -53,8 +57,6 @@ var getMovieInfo = function (movie) {
         .catch(function (error) {
             console.log(error)
         });
-
-
 };
 
 var streamingAvailability = function (movie) {
@@ -82,22 +84,14 @@ var streamingAvailability = function (movie) {
         if (response.ok) {
             return response.json();
         } else {
-
-            
             // create error message if 404 error / no object returned.
             var msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
-            var noStreamEl = document.createElement("div");
             var msgEl = document.createElement("h2");
             msgEl.textContent = (msg);
 
-            noStreamEl.appendChild(msgEl);
-
-            document.body.appendChild(noStreamEl)
-            return;
         }
     }).then(function (data) {
-        console.log(data);
         // pass the data object if it was returned
         displayStreamingLinks(data);
     });
@@ -113,7 +107,6 @@ var displayMovieInfo = function (data) {
     // Create an img element 
     var poster = document.querySelector('#movieImg')
     // set source of img as link for poster from omdb
-    console.log(data.Poster)
     poster.setAttribute("src", data.Poster)
 
     // Create text for Year
@@ -151,9 +144,8 @@ var displayStreamingLinks = function (data) {
     // Use object.keys to create an array of the names of the streaming options available 
     var options = Object.keys(data.streamingInfo);
 
-    console.log(options);
     if (options[0] == null) {
-        // if options array is empty, then teh object was returned and no streaming services were found
+        // if options array is empty, then the object was returned and no streaming services were found
         // so create a failure message and display it to the user
         msg = "We were not able to find streaming availability for " + title + ". Thank you for using find-a-flick!";
 
@@ -165,17 +157,13 @@ var displayStreamingLinks = function (data) {
         document.getElementById("linkList").appendChild(msgEl);
 
     } else {
-        // if options array is not empty, then streaming services were returned
-        // create success message
-        msg = "Thank you for using find-a-flick! Your selection of " + title + " is available to stream at:"
 
-        // then loop through the array of options to access the link for each
+        // loop through the array of options to access the link for each
         // ex data.streamingInfo[key = netflix].us.link;
         // with each iteration also save the text name of the option.
         for (var i = 0; i < options.length; i++) {
             var key = options[i];
             var link = data.streamingInfo[key].us.link;
-
             var newTab = "_blank";
 
             // save the streaming option as a string
@@ -270,8 +258,6 @@ var setState = function () {
 };
 
 $(".navbar-item").click(function (event) {
-
-    const modal = document.querySelector(".modal")
 
     // Prevent page from reloading
     event.preventDefault();

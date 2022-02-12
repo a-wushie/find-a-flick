@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', () => {
   searchBtn.addEventListener('click', (e) => {
     e.preventDefault();
 
-
     var searchItem = searchResult.value.trim()
     // var apiKey = apiResult.value.trim();
     // localStorage.setItem("key", JSON.stringify(apiKey));
