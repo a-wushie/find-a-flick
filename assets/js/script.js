@@ -1,8 +1,3 @@
-
-// To Switch to user entered API Key: 
-// comment out line 6 and 21, 27 ,28 and 34 in modal-script.js
-// uncomment out line 64 and line 59 in index.html
-
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
 var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
@@ -58,6 +53,7 @@ var getMovieInfo = function (movie) {
         .catch(function (error) {
             console.log(error)
         });
+
 
 };
 
