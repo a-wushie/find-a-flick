@@ -1,17 +1,42 @@
 /*
-Add error check to the getMovieInfo that pops up another modal with and error message.
+Things to add
 
-Add section to Read Me going over how to get an API key,
-didn't want to store it in teh cleasr. etc.  
+No Dups saved and only valid searches are saved DONE
+
+add on reload function so recent searchs populate on reload
+
+add a second text box for the API Key and functionality so user entered API key is passed along
+
+in readme include a blurd explaining the limitations and directions how to get an APIkey for free
+
+look at a modal where search results are returned on a different modal
 
 */
 // variables 
 var searchButtonEl = document.getElementsByClassName("btn");
 var api = "38c2d6859bmsh6250293f6ae6019p10b60ejsnb83f50f7665d";
 
-const modal = document.querySelector("#modal-info")
+const modal = document.querySelector("#modal-info");
 var modalError = document.querySelector("#modal-error");
-var errorMessage = document.querySelector("#error-msg")
+var errorMessage = document.querySelector("#error-msg");
+
+var checkDups = function (title) {
+    // define an object of titles 
+console.log(localStorage.length);
+    for(var i = 0; i < localStorage.length; i++) {
+        // pull each item from local storage and compare to user entered value
+        var cmp = JSON.parse(localStorage.getItem(i));
+
+        // console.log(cmp);
+        // console.log(title);
+
+        // if match is found return TRUE.  It is NOT a unqiue value
+        if (cmp === title) {
+            return true;
+        };
+    };
+};
+
 
 
 var getMovieInfo = function (movie) {
@@ -30,14 +55,25 @@ var getMovieInfo = function (movie) {
         if (data.Response === 'False') {
 
             errorMessage.textContent = ("That title was not found. Please enter a valid title.")
-            console.log(data)
+            // console.log(data)
 
             modalError.classList.add('is-active');
 
 
         } else {
+
+            // console.log(data);
+            // console.log(data.Title);
+
+            console.log(checkDups(data.Title));
+
+            if(!checkDups(data.Title)) {
+                // if user entered value is unique save the search
+                saveSearch(data.Title);
+            };
+
             displayMovieInfo(data);
-            streamingAvailability(data);
+            // streamingAvailability(data);
 
             modal.classList.add('is-active')
         }
@@ -170,13 +206,13 @@ var displayStreamingLinks = function (data) {
             var linkEl = document.createElement("a");
 
             // set link to linkS href to go to the streaming service and correct name
-            console.log(link)
+            // console.log(link)
             linkEl.setAttribute("href", link);
             // set target to _blank so link opens a new tab
             linkEl.setAttribute("target", newTab);
             linkEl.textContent = (serviceName);
             optEl.appendChild(linkEl);
-            console.log(optEl);
+            // console.log(optEl);
 
             document.getElementById("linkList").appendChild(optEl);
         };
@@ -197,8 +233,8 @@ var displayStreamingLinks = function (data) {
 // };
 
 var saveSearch = function (title) {
-    // length + 1 so nothing is overwritten
-    key = localStorage.length + 1;
+    // use localStorage.length as the key value
+    key = localStorage.length;
     var value = title;
     // save user entered title and key to local storage
     localStorage.setItem(key, JSON.stringify(value));
@@ -207,27 +243,31 @@ var saveSearch = function (title) {
     var pastSearch = document.createElement("a");
     pastSearch.setAttribute("id", key);
     pastSearch.setAttribute("class", "navbar-item nav-search");
-    pastSearch.textContent = (title);
+    pastSearch.textContent = (value);
 
     // append the elment to nav dropdown
     document.getElementById("recent-search").appendChild(pastSearch);
 };
 
+var displaySavedSearches = function () {
+    
+}
+
 $(".navbar-item").click(function (event) {
 
     // Prevent page from reloading
     event.preventDefault();
-    console.log("triggered")
+    // console.log("triggered")
 
     var key = event.target.id; 
-    console.log(key);
+    // console.log(key);
 
     // pull key from local storage
     var api = JSON.parse(localStorage.getItem(key));
 
     // pull title from local storage. 
     var movieTitle = JSON.parse(localStorage.getItem(key));
-    console.log(movieTitle);
+    // console.log(movieTitle);
 
     getMovieInfo(movieTitle)
 

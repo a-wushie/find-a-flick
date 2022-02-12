@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
       
       getMovieInfo(searchItem)
 
-      saveSearch(searchItem);
+      // saveSearch(searchItem);
 
     });
 
