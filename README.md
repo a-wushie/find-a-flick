@@ -2,14 +2,16 @@
 
 Don’t know where a movie is streaming?  
   
-Use find-a-flick to search any movie to see if it is currently available on Netflix, Hulu, Amazon, Disney+, or HBO
+Use find-a-flick to search any movie or show to see if it is currently available on Netflix, Hulu, Amazon, Disney+, HBO and several other streaming services.
 
 
 ## Table of Contents
 
 1. [Installation](#installation) 
 2. [Usage](#usage)
-3. [License](#license)
+3. [Technologies](#technologies)
+4. [Screenshot](#screenshot-of-refactored-page)
+5. [License](#license)
 
 ## Installation
 
