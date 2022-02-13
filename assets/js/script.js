@@ -268,12 +268,19 @@ $(".navbar-item").click(function (event) {
     // pull user entered key from local storage
     // var api = JSON.parse(localStorage.getItem(key));
 
+    console.log(key) 
+
+    if (!key) {
+        return;
+    } else {
+        console.log("this is still working for some reaspn")
+        var movieTitle = JSON.parse(localStorage.getItem(key));
+
+        getMovieInfo(movieTitle)
+
+        modal.classList.add('is-active')
+    }
     // pull title from local storage. 
-    var movieTitle = JSON.parse(localStorage.getItem(key));
-
-    getMovieInfo(movieTitle)
-
-    modal.classList.add('is-active')
 
 });
 
