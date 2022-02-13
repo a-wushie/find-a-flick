@@ -33,7 +33,7 @@ If the title is not found the user wil be informed.
 
 If the selection also has availability on streaming platforms links to those serivces will be show.
 
-If there were no streaming options foucn the user is informed.
+If there were no streaming options found the user is informed.
 
 ## Technologies
 
