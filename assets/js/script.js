@@ -192,7 +192,6 @@ var displayStreamingLinks = function (data) {
 };
 
 var saveSearch = function (title) {
-    console.log(numSavedSearches);
     // only want to save the last five searches
     if (numSavedSearches === 5) {
         numSavedSearches = 0;
@@ -268,12 +267,9 @@ $(".navbar-item").click(function (event) {
     // pull user entered key from local storage
     // var api = JSON.parse(localStorage.getItem(key));
 
-    console.log(key) 
-
     if (!key || key === 0 || key === "Null" || key === "recent-search") {
         return;
     } else {
-        console.log("this is still working for some reaspn")
         var movieTitle = JSON.parse(localStorage.getItem(key));
 
         getMovieInfo(movieTitle)

@@ -17,21 +17,30 @@ This application is deployed to github pages!
 
 you can either 
 
-Follow this link :   
+Follow this link :   https://acheronandstyx.github.io/find-a-flick/
 ~ OR ~  
 Use Git Clone to clone this code down to your local machine.
 
 ## Usage
 
-First, type the movie you are trying to find into the search bar and hit "Search".  
+First, type the movie or show you are trying to find into the search bar and hit "Search".  
 
-You will be displayed with information from your query like Poster, Rating, and Release date.
+If the title is found you will be shown information from your query like Poster, Rating, and Release date.
 
-If the movie is correct simply look at the streaming services icons below. 
+If the title is not found the user wil be informed.
 
-If you see a Green check, it means its currently available and you can click the link directly to the movie.
+If the selection also has availability on streaming platforms links to those serivces will be show.
 
-If you see a RED check, its means that streaming services doesnt currently offer it!
+If there were no streaming options foucn the user is informed.
+
+## Technologies
+
+Our team used the Bulma CSS framework, HTML, CSS, Javascript and jQuery to develop find-a-flick.
+
+
+## Screenshot of Refactored Page
+
+![Screenshot of Refactored Page](https://raw.github.com/AcheronandStyx/find-a-flick/main/assets/images/find-a-flick.JPG)
 
 ## License 
 
