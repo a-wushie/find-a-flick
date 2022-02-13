@@ -270,7 +270,7 @@ $(".navbar-item").click(function (event) {
 
     console.log(key) 
 
-    if (!key) {
+    if (!key || key === 0 || key === "Null" || key === "recent-search") {
         return;
     } else {
         console.log("this is still working for some reaspn")
